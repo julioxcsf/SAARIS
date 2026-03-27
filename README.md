@@ -66,7 +66,11 @@ Caso deseje avaliar o código fonte em macOS/Linux:
 2. Clone este repositório
    ```bash
    git clone https://github.com/julioxcsf/saaris.git
-4. Abra a Godot, importe o projeto e pressione F5 para compilar e iniciar.
+3. Se baixou o ZIP, extraia-o. O GitHub cria uma pasta raiz (ex: saaris-main). Entre nela até localizar o arquivo project.godot.
+4. Abra o Godot Engine 4.4.1.
+5. Clique em "Import" no Gerenciador de Projetos.
+6. Navegue e selecione a pasta interna que contém o arquivo project.godot.
+7. Com o projeto aberto, pressione F5 para iniciar a simulação.
 
 # 4. Experimentos
 
