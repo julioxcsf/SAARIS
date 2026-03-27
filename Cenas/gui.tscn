@@ -1,0 +1,1173 @@
+[gd_scene load_steps=20 format=3 uid="uid://bij4m5a13ug0q"]
+
+[ext_resource type="Script" uid="uid://xv0jd7qyy2iq" path="res://Scripts/UI/SaveLoad.gd" id="1_0wv8u"]
+[ext_resource type="Script" uid="uid://m3wa5mgh80r1" path="res://Scripts/UI/gui.gd" id="1_e7hqt"]
+[ext_resource type="Script" uid="uid://cug1ifpk2y7tc" path="res://Scripts/UI/resolution_config.gd" id="2_u77ya"]
+[ext_resource type="Script" uid="uid://bjdod802746fu" path="res://Scripts/UI/control.gd" id="3_cor1f"]
+[ext_resource type="Script" uid="uid://cuvq4rxqyp8bi" path="res://Scripts/UI/UI_save_browser_dialog.gd" id="3_dreb5"]
+[ext_resource type="Script" uid="uid://dn3u1lqlcgao2" path="res://Scripts/UI/Dialog/menu_button.gd" id="4_bihhm"]
+[ext_resource type="Script" uid="uid://ctfy1k73i8saw" path="res://Scripts/UI/freq_config.gd" id="4_cor1f"]
+[ext_resource type="Script" uid="uid://uhsjev6kf5dr" path="res://Scripts/UI/Dialog/heat_dialog.gd" id="5_6e468"]
+[ext_resource type="Script" uid="uid://cve5hvhcyouy7" path="res://Scripts/UI/UI_config_scene_button.gd" id="5_e7hqt"]
+[ext_resource type="Script" uid="uid://b6vbjl01w6wvm" path="res://Scripts/UI/ris_config.gd" id="5_jf511"]
+[ext_resource type="Script" uid="uid://32ugc6sstx8s" path="res://Scripts/UI/Dialog/simulator_dialog.gd" id="6_6e468"]
+[ext_resource type="Script" uid="uid://v2j06gm1beo2" path="res://Scripts/UI/Dialog/camera_dialog.gd" id="6_8xwpy"]
+[ext_resource type="Script" uid="uid://8w5313ln8wsu" path="res://Scripts/UI/antena_config.gd" id="6_p8208"]
+[ext_resource type="Script" uid="uid://c4awecigvlc86" path="res://Scripts/UI/target_config.gd" id="8_axmix"]
+[ext_resource type="Script" uid="uid://cspq4b74iutrb" path="res://Scripts/UI/relatorio_ui.gd" id="10_axmix"]
+[ext_resource type="Texture2D" uid="uid://cppd14yijpumv" path="res://Materiais/cor-mapa-calor.tres" id="11_3ldo6"]
+[ext_resource type="Script" uid="uid://beeve7pylbqa7" path="res://Scripts/UI/UI_config_janela_aviso.gd" id="13_kxiox"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k6omp"]
+bg_color = Color(0.243137, 0.243137, 0.243137, 1)
+
+[sub_resource type="Theme" id="Theme_e7hqt"]
+
+[node name="GUI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_e7hqt")
+
+[node name="LayoutVertical" type="VBoxContainer" parent="."]
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="BarraTopo" type="PanelContainer" parent="LayoutVertical"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="LayoutVertical/BarraTopo"]
+layout_mode = 2
+
+[node name="Button" type="MenuButton" parent="LayoutVertical/BarraTopo/HBoxContainer"]
+layout_mode = 2
+text = " Save/Load"
+item_count = 3
+popup/item_0/text = "Save Scene"
+popup/item_0/id = 0
+popup/item_1/text = "Load Scene"
+popup/item_1/id = 1
+popup/item_2/text = "Help"
+popup/item_2/id = 2
+script = ExtResource("1_0wv8u")
+
+[node name="SaveBrowserDialog" type="ConfirmationDialog" parent="LayoutVertical/BarraTopo/HBoxContainer/Button"]
+title = "Esolha de cena"
+initial_position = 1
+size = Vector2i(211, 200)
+ok_button_text = "Carregar Cena"
+script = ExtResource("3_dreb5")
+
+[node name="MarginContainer" type="MarginContainer" parent="LayoutVertical/BarraTopo/HBoxContainer/Button/SaveBrowserDialog"]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 203.0
+offset_bottom = 151.0
+
+[node name="ItemList" type="ItemList" parent="LayoutVertical/BarraTopo/HBoxContainer/Button/SaveBrowserDialog/MarginContainer"]
+layout_mode = 2
+
+[node name="VSeparator" type="VSeparator" parent="LayoutVertical/BarraTopo/HBoxContainer"]
+layout_mode = 2
+
+[node name="ConfigMenuButton" type="MenuButton" parent="LayoutVertical/BarraTopo/HBoxContainer"]
+layout_mode = 2
+text = "configuração"
+item_count = 3
+popup/item_0/text = "Ajustar relação cor-potência"
+popup/item_0/id = 0
+popup/item_1/text = "Ajustar Câmera"
+popup/item_1/id = 1
+popup/item_2/text = "Ajustar Simulador"
+popup/item_2/id = 2
+script = ExtResource("4_bihhm")
+
+[node name="HeatDialog" type="AcceptDialog" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton"]
+title = "Ajuste no mapa de cor"
+initial_position = 1
+size = Vector2i(266, 220)
+script = ExtResource("5_6e468")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/HeatDialog"]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 258.0
+offset_bottom = 171.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/HeatDialog/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/HeatDialog/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Sinal Mínimo "
+
+[node name="SpinPotMax" type="SpinBox" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/HeatDialog/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+min_value = -200.0
+max_value = 0.0
+value = -140.0
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/HeatDialog/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/HeatDialog/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Valor Crítico  "
+
+[node name="SpinPotCrit" type="SpinBox" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/HeatDialog/VBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+min_value = -200.0
+max_value = 0.0
+value = -110.0
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/HeatDialog/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/HeatDialog/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "Sinal Máximo"
+
+[node name="SpinPotMin" type="SpinBox" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/HeatDialog/VBoxContainer/HBoxContainer3"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+min_value = -200.0
+max_value = 0.0
+value = -20.0
+
+[node name="Label" type="Label" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/HeatDialog/VBoxContainer"]
+layout_mode = 2
+text = "* valores em dBm (-200 a 0)"
+horizontal_alignment = 1
+
+[node name="EscalaCorVisivel" type="CheckButton" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/HeatDialog/VBoxContainer"]
+layout_mode = 2
+text = "Apresentar escala de cor"
+
+[node name="CameraDialog" type="AcceptDialog" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton"]
+auto_translate_mode = 1
+title = "Ajustes de Câmera"
+initial_position = 1
+size = Vector2i(266, 220)
+script = ExtResource("6_8xwpy")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/CameraDialog"]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 258.0
+offset_bottom = 171.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/CameraDialog/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/CameraDialog/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Velicidade [m/s]"
+
+[node name="SpinVelocidade" type="SpinBox" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/CameraDialog/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+min_value = 10.0
+max_value = 2000.0
+value = 200.0
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/CameraDialog/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/CameraDialog/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Sensibilidade"
+
+[node name="SpinSensibilidade" type="SpinBox" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/CameraDialog/VBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+min_value = 0.1
+max_value = 1.0
+step = 0.1
+value = 0.2
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/CameraDialog/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/CameraDialog/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "FOV [ °]"
+
+[node name="SpinFOV" type="SpinBox" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/CameraDialog/VBoxContainer/HBoxContainer3"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+min_value = 10.0
+max_value = 120.0
+value = 70.0
+
+[node name="SimulatorDialog" type="AcceptDialog" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton"]
+auto_translate_mode = 1
+title = "Ajustes do Simulador"
+initial_position = 1
+size = Vector2i(399, 455)
+script = ExtResource("6_6e468")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/SimulatorDialog"]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 391.0
+offset_bottom = 406.0
+
+[node name="HBoxContainer0" type="HBoxContainer" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/SimulatorDialog/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/SimulatorDialog/VBoxContainer/HBoxContainer0"]
+layout_mode = 2
+text = "Ativar a visualização de:"
+
+[node name="HBoxContainer1" type="HBoxContainer" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/SimulatorDialog/VBoxContainer"]
+layout_mode = 2
+
+[node name="CheckLOS" type="CheckBox" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/SimulatorDialog/VBoxContainer/HBoxContainer1"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 2
+button_pressed = true
+text = "Visada Direta (LOS"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/SimulatorDialog/VBoxContainer"]
+layout_mode = 2
+
+[node name="CheckReflection" type="CheckBox" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/SimulatorDialog/VBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 2
+button_pressed = true
+text = "Reflexão"
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/SimulatorDialog/VBoxContainer"]
+layout_mode = 2
+
+[node name="CheckDiffraction" type="CheckBox" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/SimulatorDialog/VBoxContainer/HBoxContainer3"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 2
+button_pressed = true
+text = "Difração"
+
+[node name="VSeparator" type="HSeparator" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/SimulatorDialog/VBoxContainer"]
+custom_minimum_size = Vector2(0, 5.85)
+layout_mode = 2
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/SimulatorDialog/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/SimulatorDialog/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+text = "Pixels por frame"
+
+[node name="SpinPixels" type="SpinBox" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/SimulatorDialog/VBoxContainer/HBoxContainer4"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+min_value = 16.0
+max_value = 4096.0
+step = 16.0
+value = 256.0
+
+[node name="HBoxContainer5" type="HBoxContainer" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/SimulatorDialog/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/SimulatorDialog/VBoxContainer/HBoxContainer5"]
+layout_mode = 2
+text = "Numero máximo de reflexões"
+
+[node name="SpinNumReflection" type="SpinBox" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/SimulatorDialog/VBoxContainer/HBoxContainer5"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+min_value = 1.0
+max_value = 10.0
+value = 5.0
+
+[node name="HBoxContainer6" type="HBoxContainer" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/SimulatorDialog/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/SimulatorDialog/VBoxContainer/HBoxContainer6"]
+layout_mode = 2
+text = "Perda por reflexão [dB]"
+
+[node name="SpinReflecLoss" type="SpinBox" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/SimulatorDialog/VBoxContainer/HBoxContainer6"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+max_value = 30.0
+value = 5.0
+
+[node name="HBoxContainer7" type="HBoxContainer" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/SimulatorDialog/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/SimulatorDialog/VBoxContainer/HBoxContainer7"]
+layout_mode = 2
+text = "Expoente de perda caminho livre"
+
+[node name="SpinExpoent" type="SpinBox" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/SimulatorDialog/VBoxContainer/HBoxContainer7"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+min_value = 2.0
+max_value = 4.0
+step = 0.1
+value = 2.8
+
+[node name="HBoxContainer8" type="HBoxContainer" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/SimulatorDialog/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/SimulatorDialog/VBoxContainer/HBoxContainer8"]
+layout_mode = 2
+text = "Cor - potencia máxima"
+
+[node name="MaxColor" type="ColorPickerButton" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/SimulatorDialog/VBoxContainer/HBoxContainer8"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+color = Color(1, 0, 0, 1)
+
+[node name="HBoxContainer9" type="HBoxContainer" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/SimulatorDialog/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/SimulatorDialog/VBoxContainer/HBoxContainer9"]
+layout_mode = 2
+text = "Cor - potencia crítica"
+
+[node name="CritColor" type="ColorPickerButton" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/SimulatorDialog/VBoxContainer/HBoxContainer9"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+color = Color(0, 1, 0, 1)
+
+[node name="HBoxContainer10" type="HBoxContainer" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/SimulatorDialog/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/SimulatorDialog/VBoxContainer/HBoxContainer10"]
+layout_mode = 2
+text = "Cor - potencia mínima"
+
+[node name="MinColor" type="ColorPickerButton" parent="LayoutVertical/BarraTopo/HBoxContainer/ConfigMenuButton/SimulatorDialog/VBoxContainer/HBoxContainer10"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+color = Color(0, 0, 1, 1)
+
+[node name="VSeparator2" type="VSeparator" parent="LayoutVertical/BarraTopo/HBoxContainer"]
+layout_mode = 2
+
+[node name="Resolution" type="HBoxContainer" parent="LayoutVertical/BarraTopo/HBoxContainer"]
+layout_mode = 2
+script = ExtResource("2_u77ya")
+
+[node name="Label" type="Label" parent="LayoutVertical/BarraTopo/HBoxContainer/Resolution"]
+layout_mode = 2
+text = "Resolução"
+
+[node name="ResolucaoOptionButton" type="OptionButton" parent="LayoutVertical/BarraTopo/HBoxContainer/Resolution"]
+layout_mode = 2
+selected = 0
+item_count = 5
+popup/item_0/text = "Personalizado"
+popup/item_0/id = 0
+popup/item_1/text = "128x128"
+popup/item_1/id = 1
+popup/item_2/text = "256x256"
+popup/item_2/id = 2
+popup/item_3/text = "512x512"
+popup/item_3/id = 3
+popup/item_4/text = "1024x1024"
+popup/item_4/id = 4
+
+[node name="AcceptDialog" type="AcceptDialog" parent="LayoutVertical/BarraTopo/HBoxContainer/Resolution/ResolucaoOptionButton"]
+title = "Resolução personalizada"
+initial_position = 1
+size = Vector2i(237, 90)
+
+[node name="ContainerDasSpinBoxes" type="HBoxContainer" parent="LayoutVertical/BarraTopo/HBoxContainer/Resolution/ResolucaoOptionButton/AcceptDialog"]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 229.0
+offset_bottom = 41.0
+mouse_filter = 0
+
+[node name="Label" type="Label" parent="LayoutVertical/BarraTopo/HBoxContainer/Resolution/ResolucaoOptionButton/AcceptDialog/ContainerDasSpinBoxes"]
+layout_mode = 2
+text = "X "
+
+[node name="SpinBoxX" type="SpinBox" parent="LayoutVertical/BarraTopo/HBoxContainer/Resolution/ResolucaoOptionButton/AcceptDialog/ContainerDasSpinBoxes"]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 4096.0
+
+[node name="VSeparator" type="VSeparator" parent="LayoutVertical/BarraTopo/HBoxContainer/Resolution/ResolucaoOptionButton/AcceptDialog/ContainerDasSpinBoxes"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="LayoutVertical/BarraTopo/HBoxContainer/Resolution/ResolucaoOptionButton/AcceptDialog/ContainerDasSpinBoxes"]
+layout_mode = 2
+text = "Y "
+
+[node name="SpinBoxY" type="SpinBox" parent="LayoutVertical/BarraTopo/HBoxContainer/Resolution/ResolucaoOptionButton/AcceptDialog/ContainerDasSpinBoxes"]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 4096.0
+
+[node name="VSeparator3" type="VSeparator" parent="LayoutVertical/BarraTopo/HBoxContainer"]
+layout_mode = 2
+
+[node name="SceneMenuButton" type="Label" parent="LayoutVertical/BarraTopo/HBoxContainer"]
+layout_mode = 2
+text = "Cenário  "
+
+[node name="OptionButton2" type="OptionButton" parent="LayoutVertical/BarraTopo/HBoxContainer"]
+layout_mode = 2
+selected = 0
+item_count = 3
+popup/item_0/text = "Cenário Modelo"
+popup/item_0/id = 0
+popup/item_1/text = "Ilha do Fundão"
+popup/item_1/id = 1
+popup/item_2/text = "Adicionar Cenário"
+popup/item_2/id = 2
+script = ExtResource("5_e7hqt")
+
+[node name="SceneAcceptDialog" type="AcceptDialog" parent="LayoutVertical/BarraTopo/HBoxContainer/OptionButton2"]
+auto_translate_mode = 1
+title = "Importar novo cenário"
+initial_position = 1
+size = Vector2i(266, 211)
+ok_button_text = "Import"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="LayoutVertical/BarraTopo/HBoxContainer/OptionButton2/SceneAcceptDialog"]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 258.0
+offset_bottom = 162.0
+
+[node name="Label" type="Label" parent="LayoutVertical/BarraTopo/HBoxContainer/OptionButton2/SceneAcceptDialog/VBoxContainer"]
+layout_mode = 2
+text = "Insira o nome do novo cenário"
+
+[node name="TextEdit" type="TextEdit" parent="LayoutVertical/BarraTopo/HBoxContainer/OptionButton2/SceneAcceptDialog/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+placeholder_text = "scece_name"
+scroll_fit_content_height = true
+
+[node name="pick_file_Button" type="Button" parent="LayoutVertical/BarraTopo/HBoxContainer/OptionButton2/SceneAcceptDialog/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 10
+text = "Escolher arquivo"
+
+[node name="FileDialog" type="FileDialog" parent="LayoutVertical/BarraTopo/HBoxContainer/OptionButton2/SceneAcceptDialog/VBoxContainer/pick_file_Button"]
+title = "Open a File"
+initial_position = 1
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+filters = PackedStringArray("*.osm")
+
+[node name="file_path" type="TextEdit" parent="LayoutVertical/BarraTopo/HBoxContainer/OptionButton2/SceneAcceptDialog/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+placeholder_text = "file_path"
+editable = false
+scroll_fit_content_height = true
+
+[node name="VSeparator5" type="VSeparator" parent="LayoutVertical/BarraTopo/HBoxContainer"]
+layout_mode = 2
+
+[node name="HSplitContainer" type="HSplitContainer" parent="LayoutVertical/BarraTopo/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Control_HContainer" type="HBoxContainer" parent="LayoutVertical/BarraTopo/HBoxContainer"]
+layout_mode = 2
+script = ExtResource("3_cor1f")
+
+[node name="ProgressBar" type="ProgressBar" parent="LayoutVertical/BarraTopo/HBoxContainer/Control_HContainer"]
+visible = false
+custom_minimum_size = Vector2(280, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+
+[node name="start_button" type="Button" parent="LayoutVertical/BarraTopo/HBoxContainer/Control_HContainer"]
+layout_mode = 2
+text = " Start "
+
+[node name="cancel_button" type="Button" parent="LayoutVertical/BarraTopo/HBoxContainer/Control_HContainer"]
+layout_mode = 2
+text = "Cancel"
+
+[node name="AreaTrabalho" type="HBoxContainer" parent="LayoutVertical"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Sidebar" type="ScrollContainer" parent="LayoutVertical/AreaTrabalho"]
+layout_mode = 2
+mouse_filter = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_k6omp")
+horizontal_scroll_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="LayoutVertical/AreaTrabalho/Sidebar"]
+custom_minimum_size = Vector2(115, 0)
+layout_mode = 2
+
+[node name="antenas_VBoxContainer" type="VBoxContainer" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer"]
+layout_mode = 2
+
+[node name="antenas_Button" type="Button" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer"]
+layout_mode = 2
+text = "Gerenciar TX ▼"
+script = ExtResource("6_p8208")
+
+[node name="Antena_Panel" type="PanelContainer" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer"]
+visible = false
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Antena_Panel"]
+layout_mode = 2
+
+[node name="ListaAntenas" type="ItemList" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Antena_Panel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Antena_Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="BtnRemove" type="Button" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Antena_Panel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "-"
+
+[node name="BtnAdd" type="Button" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Antena_Panel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "+"
+
+[node name="HSeparator" type="HSeparator" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Antena_Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="EditorRIS" type="VBoxContainer" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Antena_Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="ON_OFF" type="CheckButton" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Antena_Panel/VBoxContainer/EditorRIS"]
+layout_mode = 2
+button_pressed = true
+text = "ON/OFF"
+alignment = 1
+
+[node name="Label" type="Label" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Antena_Panel/VBoxContainer/EditorRIS"]
+layout_mode = 2
+text = "Freq(MHz)"
+horizontal_alignment = 1
+
+[node name="VBoxContainer" type="HBoxContainer" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Antena_Panel/VBoxContainer/EditorRIS"]
+layout_mode = 2
+
+[node name="Spin_Freq_MHz" type="SpinBox" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Antena_Panel/VBoxContainer/EditorRIS/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1e+06
+step = 0.01
+
+[node name="Potencia_TX" type="Label" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Antena_Panel/VBoxContainer/EditorRIS"]
+layout_mode = 2
+text = "Potência (dBm)"
+horizontal_alignment = 1
+
+[node name="VBoxContainer2" type="HBoxContainer" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Antena_Panel/VBoxContainer/EditorRIS"]
+layout_mode = 2
+
+[node name="Spin_Pot_dBm" type="SpinBox" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Antena_Panel/VBoxContainer/EditorRIS/VBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HSeparator2" type="HSeparator" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Antena_Panel/VBoxContainer/EditorRIS"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Antena_Panel/VBoxContainer/EditorRIS"]
+layout_mode = 2
+text = "   Posição         fixar"
+
+[node name="VBoxContainer3" type="HBoxContainer" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Antena_Panel/VBoxContainer/EditorRIS"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Antena_Panel/VBoxContainer/EditorRIS/VBoxContainer3"]
+layout_mode = 2
+text = " X  "
+
+[node name="SpinX" type="SpinBox" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Antena_Panel/VBoxContainer/EditorRIS/VBoxContainer3"]
+layout_mode = 2
+min_value = -100000.0
+max_value = 100000.0
+step = 0.1
+
+[node name="FixarX" type="CheckButton" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Antena_Panel/VBoxContainer/EditorRIS/VBoxContainer3"]
+layout_mode = 2
+
+[node name="VBoxContainer4" type="HBoxContainer" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Antena_Panel/VBoxContainer/EditorRIS"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Antena_Panel/VBoxContainer/EditorRIS/VBoxContainer4"]
+layout_mode = 2
+text = " Y  "
+
+[node name="SpinY" type="SpinBox" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Antena_Panel/VBoxContainer/EditorRIS/VBoxContainer4"]
+layout_mode = 2
+min_value = -100000.0
+max_value = 100000.0
+step = 0.1
+
+[node name="FixarY" type="CheckButton" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Antena_Panel/VBoxContainer/EditorRIS/VBoxContainer4"]
+layout_mode = 2
+
+[node name="VBoxContainer5" type="HBoxContainer" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Antena_Panel/VBoxContainer/EditorRIS"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Antena_Panel/VBoxContainer/EditorRIS/VBoxContainer5"]
+layout_mode = 2
+text = " Z  "
+
+[node name="SpinZ" type="SpinBox" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Antena_Panel/VBoxContainer/EditorRIS/VBoxContainer5"]
+layout_mode = 2
+min_value = -100000.0
+max_value = 100000.0
+step = 0.1
+
+[node name="FixarZ" type="CheckButton" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Antena_Panel/VBoxContainer/EditorRIS/VBoxContainer5"]
+layout_mode = 2
+
+[node name="BtnUpdate" type="Button" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Antena_Panel/VBoxContainer/EditorRIS"]
+layout_mode = 2
+text = "Aplicar
+Alterações"
+
+[node name="RIS_Button" type="Button" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer"]
+layout_mode = 2
+text = "Gerenciar RIS ▼"
+script = ExtResource("5_jf511")
+
+[node name="RIS_Panel" type="PanelContainer" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel"]
+layout_mode = 2
+
+[node name="ListaRIS" type="ItemList" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+item_count = 1
+item_0/text = "RIS1"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="BtnRemove" type="Button" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "-"
+
+[node name="BtnAdd" type="Button" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "+"
+
+[node name="HSeparator" type="HSeparator" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="EditorRIS" type="VBoxContainer" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="CheckON" type="CheckButton" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer/EditorRIS"]
+layout_mode = 2
+text = "RIS ON"
+alignment = 1
+
+[node name="Label5" type="Label" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer/EditorRIS"]
+layout_mode = 2
+text = "RIS STATUS"
+horizontal_alignment = 1
+
+[node name="RIS_Status" type="RichTextLabel" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer/EditorRIS"]
+clip_contents = false
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+fit_content = true
+horizontal_alignment = 1
+
+[node name="HSeparator7" type="HSeparator" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer/EditorRIS"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer/EditorRIS"]
+layout_mode = 2
+text = "Freq(MHz)"
+horizontal_alignment = 1
+
+[node name="SpinFreq" type="SpinBox" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer/EditorRIS"]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1e+06
+step = 0.01
+page = 100.0
+
+[node name="label_tamanho" type="Label" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer/EditorRIS"]
+layout_mode = 2
+text = "Tamanho da célula
+a x b (cm²)"
+horizontal_alignment = 1
+
+[node name="HSeparator4" type="HSeparator" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer/EditorRIS"]
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer/EditorRIS"]
+visible = false
+layout_mode = 2
+text = "Ganho
+(razão entre áreas)
+ A_RIS / A_RX"
+horizontal_alignment = 1
+
+[node name="SpinGanho" type="SpinBox" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer/EditorRIS"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+step = 0.0
+allow_greater = true
+allow_lesser = true
+
+[node name="Ganho_dB" type="Label" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer/EditorRIS"]
+visible = false
+layout_mode = 2
+text = "Ganho [dB]: X"
+horizontal_alignment = 1
+
+[node name="SwitchGanhoFixo" type="CheckButton" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer/EditorRIS"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Fixar ganho"
+
+[node name="Eficiencia" type="Label" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer/EditorRIS"]
+layout_mode = 2
+text = "Eficiência"
+horizontal_alignment = 1
+
+[node name="SpinEficiencia" type="SpinBox" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer/EditorRIS"]
+layout_mode = 2
+size_flags_horizontal = 4
+step = 0.001
+
+[node name="HSeparator6" type="HSeparator" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer/EditorRIS"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer/EditorRIS"]
+layout_mode = 2
+text = "Células (NxM)"
+horizontal_alignment = 1
+
+[node name="VBoxContainer3" type="HBoxContainer" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer/EditorRIS"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer/EditorRIS/VBoxContainer3"]
+layout_mode = 2
+text = " N  "
+
+[node name="SpinCellN" type="SpinBox" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer/EditorRIS/VBoxContainer3"]
+layout_mode = 2
+min_value = 1.0
+max_value = 10000.0
+value = 1.0
+
+[node name="VBoxContainer4" type="HBoxContainer" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer/EditorRIS"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer/EditorRIS/VBoxContainer4"]
+layout_mode = 2
+text = " M "
+
+[node name="SpinCellM" type="SpinBox" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer/EditorRIS/VBoxContainer4"]
+layout_mode = 2
+min_value = 1.0
+max_value = 10000.0
+value = 1.0
+
+[node name="SwitchTamanhoFixo" type="CheckButton" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer/EditorRIS"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Fixar tamanho"
+
+[node name="HSeparator3" type="HSeparator" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer/EditorRIS"]
+layout_mode = 2
+
+[node name="LabelPosicao" type="Label" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer/EditorRIS"]
+layout_mode = 2
+text = "   Posição         fixar"
+
+[node name="VBoxContainer5" type="HBoxContainer" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer/EditorRIS"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer/EditorRIS/VBoxContainer5"]
+layout_mode = 2
+text = "  X  "
+
+[node name="SpinX" type="SpinBox" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer/EditorRIS/VBoxContainer5"]
+layout_mode = 2
+min_value = -100000.0
+max_value = 100000.0
+
+[node name="FixarX" type="CheckButton" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer/EditorRIS/VBoxContainer5"]
+layout_mode = 2
+
+[node name="VBoxContainer6" type="HBoxContainer" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer/EditorRIS"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer/EditorRIS/VBoxContainer6"]
+layout_mode = 2
+text = "  Y  "
+
+[node name="SpinY" type="SpinBox" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer/EditorRIS/VBoxContainer6"]
+layout_mode = 2
+min_value = -100000.0
+max_value = 100000.0
+
+[node name="FixarY" type="CheckButton" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer/EditorRIS/VBoxContainer6"]
+layout_mode = 2
+
+[node name="VBoxContainer7" type="HBoxContainer" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer/EditorRIS"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer/EditorRIS/VBoxContainer7"]
+layout_mode = 2
+text = "  Z  "
+
+[node name="SpinZ" type="SpinBox" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer/EditorRIS/VBoxContainer7"]
+layout_mode = 2
+min_value = -100000.0
+max_value = 100000.0
+
+[node name="FixarZ" type="CheckButton" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer/EditorRIS/VBoxContainer7"]
+layout_mode = 2
+
+[node name="HSeparator5" type="HSeparator" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer/EditorRIS"]
+layout_mode = 2
+
+[node name="Label4" type="Label" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer/EditorRIS"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = " Orientação(°)"
+
+[node name="SpinRot" type="SpinBox" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer/EditorRIS"]
+layout_mode = 2
+size_flags_horizontal = 4
+max_value = 360.0
+
+[node name="BtnUpdateRIS" type="Button" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer/EditorRIS"]
+layout_mode = 2
+text = "Aplicar
+Alterações"
+
+[node name="Target_Button" type="Button" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer"]
+layout_mode = 2
+text = "Gerenciar RX ▼"
+script = ExtResource("8_axmix")
+
+[node name="Target_Panel" type="PanelContainer" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer"]
+visible = false
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Target_Panel"]
+layout_mode = 2
+
+[node name="ListaTarget" type="ItemList" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Target_Panel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Target_Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="BtnRemove" type="Button" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Target_Panel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "-"
+
+[node name="BtnAdd" type="Button" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Target_Panel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "+"
+
+[node name="HSeparator" type="HSeparator" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Target_Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="EditorTarget" type="VBoxContainer" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Target_Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="CheckButton" type="CheckButton" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Target_Panel/VBoxContainer/EditorTarget"]
+visible = false
+layout_mode = 2
+text = "OFF"
+alignment = 1
+
+[node name="Label" type="Label" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Target_Panel/VBoxContainer/EditorTarget"]
+layout_mode = 2
+text = "Dimensões
+(m²)"
+horizontal_alignment = 1
+
+[node name="VBoxContainer" type="HBoxContainer" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Target_Panel/VBoxContainer/EditorTarget"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Target_Panel/VBoxContainer/EditorTarget/VBoxContainer"]
+layout_mode = 2
+text = "  x "
+
+[node name="SpinSizeX" type="SpinBox" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Target_Panel/VBoxContainer/EditorTarget/VBoxContainer"]
+layout_mode = 2
+max_value = 500.0
+step = 0.1
+
+[node name="VBoxContainer2" type="HBoxContainer" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Target_Panel/VBoxContainer/EditorTarget"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Target_Panel/VBoxContainer/EditorTarget/VBoxContainer2"]
+layout_mode = 2
+text = "  z "
+
+[node name="SpinSizeZ" type="SpinBox" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Target_Panel/VBoxContainer/EditorTarget/VBoxContainer2"]
+layout_mode = 2
+max_value = 500.0
+step = 0.1
+
+[node name="HSeparator2" type="HSeparator" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Target_Panel/VBoxContainer/EditorTarget"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Target_Panel/VBoxContainer/EditorTarget"]
+layout_mode = 2
+text = "Posição"
+horizontal_alignment = 1
+
+[node name="VBoxContainer3" type="HBoxContainer" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Target_Panel/VBoxContainer/EditorTarget"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Target_Panel/VBoxContainer/EditorTarget/VBoxContainer3"]
+layout_mode = 2
+text = "  X  "
+
+[node name="SpinX" type="SpinBox" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Target_Panel/VBoxContainer/EditorTarget/VBoxContainer3"]
+layout_mode = 2
+min_value = -100000.0
+max_value = 100000.0
+
+[node name="VBoxContainer4" type="HBoxContainer" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Target_Panel/VBoxContainer/EditorTarget"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Target_Panel/VBoxContainer/EditorTarget/VBoxContainer4"]
+layout_mode = 2
+text = "  Y  "
+
+[node name="SpinY" type="SpinBox" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Target_Panel/VBoxContainer/EditorTarget/VBoxContainer4"]
+layout_mode = 2
+min_value = -100000.0
+max_value = 100000.0
+
+[node name="FixarY" type="CheckButton" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Target_Panel/VBoxContainer/EditorTarget/VBoxContainer4"]
+layout_mode = 2
+
+[node name="VBoxContainer5" type="HBoxContainer" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Target_Panel/VBoxContainer/EditorTarget"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Target_Panel/VBoxContainer/EditorTarget/VBoxContainer5"]
+layout_mode = 2
+text = "  Z  "
+
+[node name="SpinZ" type="SpinBox" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Target_Panel/VBoxContainer/EditorTarget/VBoxContainer5"]
+layout_mode = 2
+min_value = -100000.0
+max_value = 100000.0
+
+[node name="HSeparator4" type="HSeparator" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Target_Panel/VBoxContainer/EditorTarget"]
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Target_Panel/VBoxContainer/EditorTarget"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = " Orientação(°)"
+
+[node name="SpinRot" type="SpinBox" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Target_Panel/VBoxContainer/EditorTarget"]
+layout_mode = 2
+size_flags_horizontal = 4
+max_value = 360.0
+
+[node name="HSeparator3" type="HSeparator" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Target_Panel/VBoxContainer/EditorTarget"]
+layout_mode = 2
+
+[node name="LabelCusto" type="Label" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Target_Panel/VBoxContainer/EditorTarget"]
+visible = false
+layout_mode = 2
+text = "Peso
+(importância)
+0 a 1"
+horizontal_alignment = 1
+
+[node name="VBoxContainer6" type="HBoxContainer" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Target_Panel/VBoxContainer/EditorTarget"]
+visible = false
+layout_mode = 2
+
+[node name="Label" type="Label" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Target_Panel/VBoxContainer/EditorTarget/VBoxContainer6"]
+layout_mode = 2
+text = "Peso"
+
+[node name="SpinPeso" type="SpinBox" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Target_Panel/VBoxContainer/EditorTarget/VBoxContainer6"]
+layout_mode = 2
+max_value = 1.0
+step = 0.05
+value = 1.0
+
+[node name="BtnUpdateAlvo" type="Button" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Target_Panel/VBoxContainer/EditorTarget"]
+layout_mode = 2
+text = "Aplicar
+Alterações"
+
+[node name="Freq_Button" type="Button" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer"]
+visible = false
+layout_mode = 2
+text = "Frequência"
+script = ExtResource("4_cor1f")
+
+[node name="AcceptDialog" type="AcceptDialog" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Freq_Button"]
+title = "Configuração de frequência"
+initial_position = 1
+size = Vector2i(320, 123)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Freq_Button/AcceptDialog"]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 312.0
+offset_bottom = 74.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Freq_Button/AcceptDialog/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Freq_Button/AcceptDialog/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Frequência"
+
+[node name="OptionButton" type="OptionButton" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Freq_Button/AcceptDialog/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+selected = 0
+item_count = 4
+popup/item_0/text = "4G - 700 MHz"
+popup/item_0/id = 1
+popup/item_1/text = "4G - 1800 MHz (Urbano)"
+popup/item_1/id = 2
+popup/item_2/text = "5G - 3.5 GHz"
+popup/item_2/id = 3
+popup/item_3/text = "Personalizado"
+popup/item_3/id = 0
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Freq_Button/AcceptDialog/VBoxContainer"]
+layout_mode = 2
+
+[node name="SpinBox" type="SpinBox" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Freq_Button/AcceptDialog/VBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(143, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+max_value = 1e+06
+step = 0.1
+
+[node name="OptionButton" type="OptionButton" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Freq_Button/AcceptDialog/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+selected = 1
+item_count = 4
+popup/item_0/text = "GHz"
+popup/item_0/id = 0
+popup/item_1/text = "MHz"
+popup/item_1/id = 1
+popup/item_2/text = "kHz"
+popup/item_2/id = 2
+popup/item_3/text = "Hz"
+popup/item_3/id = 3
+
+[node name="Dados" type="Label" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer"]
+layout_mode = 2
+text = "Relatório:"
+script = ExtResource("10_axmix")
+
+[node name="Label_potencia" type="Label" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer"]
+layout_mode = 2
+text = "Sinal: ---"
+
+[node name="LigarPonteira" type="CheckButton" parent="LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer"]
+layout_mode = 2
+text = "Ponteira
+de Potência
+"
+
+[node name="Simulacao" type="Control" parent="LayoutVertical/AreaTrabalho"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="GradientContainer" type="VBoxContainer" parent="LayoutVertical/AreaTrabalho/Simulacao"]
+visible = false
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -256.0
+offset_top = -67.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = SubResource("Theme_e7hqt")
+
+[node name="Gradient" type="TextureRect" parent="LayoutVertical/AreaTrabalho/Simulacao/GradientContainer"]
+custom_minimum_size = Vector2(50, 40)
+layout_mode = 2
+size_flags_horizontal = 8
+texture = ExtResource("11_3ldo6")
+
+[node name="label_pot" type="HBoxContainer" parent="LayoutVertical/AreaTrabalho/Simulacao/GradientContainer"]
+layout_mode = 2
+
+[node name="min" type="Label" parent="LayoutVertical/AreaTrabalho/Simulacao/GradientContainer/label_pot"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="crit" type="Label" parent="LayoutVertical/AreaTrabalho/Simulacao/GradientContainer/label_pot"]
+layout_mode = 2
+size_flags_horizontal = 3
+horizontal_alignment = 1
+
+[node name="max" type="Label" parent="LayoutVertical/AreaTrabalho/Simulacao/GradientContainer/label_pot"]
+layout_mode = 2
+size_flags_horizontal = 3
+horizontal_alignment = 2
+
+[node name="JanelaAviso" type="AcceptDialog" parent="LayoutVertical"]
+title = "Atenção!"
+initial_position = 1
+size = Vector2i(200, 200)
+script = ExtResource("13_kxiox")

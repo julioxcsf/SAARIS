@@ -1,0 +1,13 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://ip5sp5ssdawr"]
+
+[ext_resource type="Shader" uid="uid://yyrkls7cafpq" path="res://Shaders/mapa_calor_shader_material.gdshader" id="1_h78p3"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_h78p3")
+shader_parameter/min_color = Color(0, 0, 1, 1)
+shader_parameter/critical_color = Color(0, 1, 0, 1)
+shader_parameter/max_color = Color(1, 0, 0, 1)
+shader_parameter/min_sinal_dbm = 100.0
+shader_parameter/critical_sinal_dbm = 30.0
+shader_parameter/max_sinal_dbm = 0.0

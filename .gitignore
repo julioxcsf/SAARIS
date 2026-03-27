@@ -1,0 +1,12 @@
+<<<<<<< HEAD
+.godot/
+.import/
+export.cfg
+export_presets.cfg
+*.tmp
+*.log
+=======
+# Godot 4+ specific ignores
+.godot/
+/android/
+>>>>>>> b2c376b (Primeiro commit: Inicio de Simulador-Redes-Moveis)

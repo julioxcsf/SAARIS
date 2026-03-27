@@ -1,0 +1,89 @@
+[gd_scene load_steps=12 format=3 uid="uid://bcdns3id2xrhm"]
+
+[ext_resource type="PackedScene" uid="uid://bij4m5a13ug0q" path="res://Cenas/gui.tscn" id="1_x6di6"]
+[ext_resource type="Script" uid="uid://cp5lu2mwy443j" path="res://Scripts/Nodes/camera_3d.gd" id="2_btbr3"]
+[ext_resource type="Script" uid="uid://cwkglf5j72tvg" path="res://Scripts/Nodes/osm_importer.gd" id="3_jjrtw"]
+[ext_resource type="PackedScene" uid="uid://btflaejd5wfue" path="res://Cenas/cenario_validacao.tscn" id="4_7yi6i"]
+[ext_resource type="Script" uid="uid://cj6re7btx3yis" path="res://Scripts/Nodes/node_tx.gd" id="5_irhh0"]
+[ext_resource type="Script" uid="uid://draf1mg7fk22l" path="res://Scripts/Nodes/node_ris.gd" id="6_me8gh"]
+[ext_resource type="Script" uid="uid://bgxyns80xd5s0" path="res://Scripts/Nodes/node_rx.gd" id="7_330ga"]
+[ext_resource type="Script" uid="uid://pkk2rxox3m37" path="res://Scripts/Simulator/simulator.gd" id="8_3ea3k"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_lquwl"]
+sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+ground_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+
+[sub_resource type="Sky" id="Sky_7mycd"]
+sky_material = SubResource("ProceduralSkyMaterial_lquwl")
+
+[sub_resource type="Environment" id="Environment_272bh"]
+background_mode = 2
+sky = SubResource("Sky_7mycd")
+tonemap_mode = 2
+glow_enabled = true
+
+[node name="Main" type="Node3D"]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="GUI" parent="CanvasLayer" instance=ExtResource("1_x6di6")]
+
+[node name="ListaRIS" parent="CanvasLayer/GUI/LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer" index="0"]
+clip_contents = false
+size_flags_vertical = 3
+item_count = 0
+
+[node name="AcceptDialog" parent="CanvasLayer/GUI/LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/Freq_Button" index="0"]
+auto_translate_mode = 1
+
+[node name="Environment" type="Node3D" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Environment"]
+environment = SubResource("Environment_272bh")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment"]
+transform = Transform3D(-0.866024, -0.114176, 0.486793, 0, 0.973579, 0.228351, -0.500003, 0.197757, -0.843142, 32.5612, 47.5686, -31.9341)
+shadow_enabled = true
+directional_shadow_mode = 0
+directional_shadow_max_distance = 1500.0
+directional_shadow_pancake_size = 0.0
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.900326, 0.435215, 0, -0.435215, 0.900326, 1.79412, 199.126, 344.415)
+current = true
+near = 0.5
+script = ExtResource("2_btbr3")
+
+[node name="Simulation" type="Node3D" parent="."]
+
+[node name="OSM_Importer" type="Node3D" parent="Simulation"]
+script = ExtResource("3_jjrtw")
+osm_file_path = ""
+carregar_mapa = false
+limpar_tudo = false
+road_width = 6.0
+gerar_chao_limite_real = true
+cor_chao = Color(0.15, 0.35, 0.15, 1)
+altura_extra_chao = 0.1
+margin = 500.0
+altura_por_andar = 3.0
+usar_altura_padrao_se_falhar = 10.0
+estatistica_alturas = Array[Vector2]([Vector2(0.3, 15), Vector2(6, 8), Vector2(0.1, 4)])
+
+[node name="Scene3D" type="Node3D" parent="Simulation"]
+
+[node name="Cenario_validacao" parent="Simulation/Scene3D" instance=ExtResource("4_7yi6i")]
+
+[node name="Node_TX" type="Node3D" parent="Simulation"]
+script = ExtResource("5_irhh0")
+
+[node name="Node_RIS" type="Node3D" parent="Simulation"]
+script = ExtResource("6_me8gh")
+
+[node name="Node_RX" type="Node3D" parent="Simulation"]
+script = ExtResource("7_330ga")
+
+[node name="Simulator" type="Node3D" parent="Simulation"]
+script = ExtResource("8_3ea3k")
+
+[editable path="CanvasLayer/GUI"]

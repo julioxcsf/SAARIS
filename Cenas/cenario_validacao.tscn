@@ -1,0 +1,48 @@
+[gd_scene load_steps=8 format=3 uid="uid://btflaejd5wfue"]
+
+[ext_resource type="PackedScene" uid="uid://daf3cc5kroemb" path="res://Cenas/Componentes/muro_obstaculo.tscn" id="1_ecv6d"]
+[ext_resource type="PackedScene" uid="uid://duhfgeb27nif2" path="res://Cenas/Componentes/predio_obstaculo.tscn" id="1_iap5t"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_yfuwx"]
+sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+ground_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+
+[sub_resource type="Sky" id="Sky_4srlt"]
+sky_material = SubResource("ProceduralSkyMaterial_yfuwx")
+
+[sub_resource type="Environment" id="Environment_jeq2m"]
+background_mode = 2
+sky = SubResource("Sky_4srlt")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_2bxyg"]
+size = Vector2(1000, 1000)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_fc6km"]
+data = PackedVector3Array(500, 0, 500, -500, 0, 500, 500, 0, -500, -500, 0, 500, -500, 0, -500, 500, 0, -500)
+
+[node name="Cenario_validacao" type="Node3D"]
+
+[node name="Ambiente" type="Node3D" parent="."]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Ambiente"]
+transform = Transform3D(-0.866023, -0.114176, 0.486793, 0, 0.973579, 0.22835, -0.500003, 0.197757, -0.843142, 0, 0, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Ambiente"]
+environment = SubResource("Environment_jeq2m")
+
+[node name="ChaoMapaDeCalor" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_2bxyg")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="ChaoMapaDeCalor"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ChaoMapaDeCalor/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_fc6km")
+
+[node name="Node3D2" parent="." instance=ExtResource("1_ecv6d")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 150, 0, 0)
+
+[node name="Node3D3" parent="." instance=ExtResource("1_iap5t")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -150, 0, 0)

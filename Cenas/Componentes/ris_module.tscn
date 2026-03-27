@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://drbeysdmpelff"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_agn7m"]
+albedo_color = Color(1, 0.443137, 1, 1)
+emission_enabled = true
+emission = Color(1, 0, 0.337255, 1)
+emission_energy_multiplier = 14.16
+
+[sub_resource type="BoxMesh" id="BoxMesh_vwaoy"]
+material = SubResource("StandardMaterial3D_agn7m")
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_aeof2"]
+data = PackedVector3Array(-0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5)
+
+[node name="RIS_Module" type="MeshInstance3D"]
+mesh = SubResource("BoxMesh_vwaoy")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_aeof2")
