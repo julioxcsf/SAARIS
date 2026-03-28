@@ -85,6 +85,9 @@ Este tópico orienta a reprodução das simulações do artigo.
 ### Reprodução dos Gráficos Analíticos
 Os gráficos apresentados no artigo são dinâmicos e dependem dos dados espaciais gerados e exportados pelo simulador SAARIS para arquivos `.csv` (salvos automaticamente na pasta `Saves` do projeto após a conclusão de uma simulação).
 
+### NOTA DE FIDELIDADE VISUAL
+Para reproduzir exatamente o gradiente de cores das figuras do artigo, acesse Configurações → Mapa de Calor e defina os limites de potência conforme a escala de validação: Máxima (-40 dBm), Crítica (-75 dBm) e Mínima (-120 dBm).
+
 Para validar a plotagem teórica vs. simulação numérica e garantir a reprodutibilidade (SELOR) sem a necessidade de instalar Python localmente, disponibilizamos um script em formato Jupyter Notebook (`Analise_Resultados_SAARIS.ipynb`) na raiz deste repositório.
 
 **Fluxo de Validação:**
