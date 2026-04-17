@@ -18,9 +18,9 @@ Este documento está organizado para guiar os avaliadores desde a configuração
 
 *   [**1. Título e Resumo**](#saaris---simulador-aberto-de-antenas-e-ris): Apresenta o contexto do artefato.
 *   [**2. Selos Considerados e Preocupações com Segurança**](#2-selos-considerados): Informações importantes para o processo de avaliação.
-*   [**3. Requisitos, Dependências e Instalação**](#3-requisitos-dependências-e-instalação): Guias para preparar o ambiente de execução, incluindo opções para Docker.
-*   [**4. Experimentos**](#4-experimentos): Instruções detalhadas para reproduzir cada reivindicação do artigo, com opções de fluxo automatizado e manual.
-*   [**5. Controles Básicos**](#5-controles-básicos): Instruções gerais para o uso adequado da ferramenta
+*   [**3. Requisitos, Dependências e Instalação**](#3-requisitos-dependências-e-instalação): Requisitos de hardware/software e instruções para execução via binário ou código-fonte.
+*   [**4. Experimentos**](#4-experimentos): Instruções detalhadas para reproduzir cada reivindicação do artigo, de fluxo manual.
+*   [**5. Controles Básicos**](#5-controles-básicos): Instruções gerais para o uso adequado da ferramenta, com operação da interface e comandos de movimentação/câmera.
 *   [**6. LICENSE**](#6-license): Informações sobre a licença do software.
 
 # 2. Selos Considerados
@@ -42,8 +42,8 @@ Esta seção descreve os requisitos de hardware e software para a execução dos
     *   Aproximadamente **150 MB** de espaço livre em disco para o executável, assets geométricos e configurações.
 *   **Software:**
     *   Sistema Operacional: Windows 10/11, macOS ou Linux.
-    *   Opção Executável: Nenhuma engine necessária (Apenas Windows).
-    *   Opção Código Fonte: Godot Engine 4.4.1 stable (Versão Standard).
+    *   Opção Executável: Windows (binário autossuficiente).
+    *   Opção Código Fonte: Godot Engine 4.4.1 Stable (Versão Standard).
 
 ## 3.2 Dependências
 Os modelos 3D do cenário de teste inicial e o arquivo.osm da candelária ja estão incluidos no projeto, removendo qualquer necessidade de manipulação.
