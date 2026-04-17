@@ -16,12 +16,12 @@ Este artefato é uma ferramenta visual e interativa focada na simulação de pro
 
 Este documento está organizado para guiar os avaliadores desde a configuração do ambiente até a replicação completa dos resultados do artigo. As seções incluem:
 
-*   [**1. Título e Resumo**] (#saaris---simulador-aberto-de-antenas-e-ris): Apresenta o contexto do artefato.
-*   [**2. Selos Considerados e Preocupações com Segurança**] (#2-selos-considerados): Informações importantes para o processo de avaliação.
-*   [**3. Requisitos, Dependências e Instalação**] (#3-requisitos-dependências-e-instalação): Guias para preparar o ambiente de execução, incluindo opções para Docker.
-*   [**4. Experimentos**] (#4-experimentos): Instruções detalhadas para reproduzir cada reivindicação do artigo, com opções de fluxo automatizado e manual.
-*   [**5. Controles Básicos**] (#5-controles-básicos): Instruções gerais para o uso adequado da ferramenta
-*   [**6. LICENSE**] (#6-license): Informações sobre a licença do software.
+*   [**1. Título e Resumo**](#saaris---simulador-aberto-de-antenas-e-ris): Apresenta o contexto do artefato.
+*   [**2. Selos Considerados e Preocupações com Segurança**](#2-selos-considerados): Informações importantes para o processo de avaliação.
+*   [**3. Requisitos, Dependências e Instalação**](#3-requisitos-dependências-e-instalação): Guias para preparar o ambiente de execução, incluindo opções para Docker.
+*   [**4. Experimentos**](#4-experimentos): Instruções detalhadas para reproduzir cada reivindicação do artigo, com opções de fluxo automatizado e manual.
+*   [**5. Controles Básicos**](#5-controles-básicos): Instruções gerais para o uso adequado da ferramenta
+*   [**6. LICENSE**](#6-license): Informações sobre a licença do software.
 
 # 2. Selos Considerados
 
