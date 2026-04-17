@@ -16,12 +16,12 @@ Este artefato é uma ferramenta visual e interativa focada na simulação de pro
 
 Este documento está organizado para guiar os avaliadores desde a configuração do ambiente até a replicação completa dos resultados do artigo. As seções incluem:
 
-*   **1. Título e Resumo:** Apresenta o contexto do artefato.
-*   **2. Selos Considerados e Preocupações com Segurança:** Informações importantes para o processo de avaliação.
-*   **3. Requisitos, Dependências e Instalação:** Guias para preparar o ambiente de execução, incluindo opções para Docker.
-*   **4. Experimentos:** Instruções detalhadas para reproduzir cada reivindicação do artigo, com opções de fluxo automatizado e manual.
-*   **5. Controles Básicos:** Instruções gerais para o uso adequado da ferramenta
-*   **6. LICENSE:** Informações sobre a licença do software.
+*   [**1. Título e Resumo**] (#saaris---simulador-aberto-de-antenas-e-ris): Apresenta o contexto do artefato.
+*   [**2. Selos Considerados e Preocupações com Segurança**] (#2-selos-considerados): Informações importantes para o processo de avaliação.
+*   [**3. Requisitos, Dependências e Instalação**] (#3-requisitos-dependências-e-instalação): Guias para preparar o ambiente de execução, incluindo opções para Docker.
+*   [**4. Experimentos**] (#4-experimentos): Instruções detalhadas para reproduzir cada reivindicação do artigo, com opções de fluxo automatizado e manual.
+*   [**5. Controles Básicos**] (#5-controles-básicos): Instruções gerais para o uso adequado da ferramenta
+*   [**6. LICENSE**] (#6-license): Informações sobre a licença do software.
 
 # 2. Selos Considerados
 
@@ -94,7 +94,7 @@ Para validar a plotagem teórica vs. simulação numérica e garantir a reprodut
 1. Execute o Experimento de Propagação Básica no simulador SAARIS. Ao final do processamento, o motor exportará um arquivo chamado `saaris_export_[DATA-HORA].csv` para a pasta `Saves`.
 2. Acesse uma plataforma online como o **Google Colab** (colab.research.google.com) ou JupyterLite e faça o upload do arquivo `Analise_Resultados_SAARIS.ipynb`.
 3. No painel de arquivos da plataforma online, faça o upload do `.csv` que o simulador gerou.
-4. Execute as células do Notebook. O script identificará automaticamente o CSV gerado, aplicará o modelo teórico matemático (ITU-R P.526) e fará a plotagem do gráfico analítico idêntico ao apresentado no artigo.
+4. Execute as células do Notebook. O script identificará automaticamente o CSV gerado, aplicará o modelo teórico matemático (ITU-R P.526) e fará a plotagem do gráfico analítico e o cálculo do erro estatístico (RMSE) idênticos aos apresentados no artigo.
 
 **Resultado esperado:**
 O cenário simulado reproduzirá exatamente a imagem de demonstração apresentada no início desta página, ilustrando a propagação básica de radiofrequência, a atenuação no espaço livre e a formação nítida de zonas de sombra (difração) nos obstáculos geométricos.
