@@ -12,6 +12,11 @@ Inteligentes Reconfiguráveis
 
 Este artefato é uma ferramenta visual e interativa focada na simulação de propagação de sinais de radiofrequência, antenas e Superfícies Refletoras Inteligentes (RIS). O documento guia os avaliadores desde a configuração da engine gráfica até a operação da interface para reproduzir os mapas de calor e os cenários de teste estruturais.
 
+No Youtube, está disponível um vídeo que apresenta como importar o projeto para a Game Engine Godot 4, além de alguns dos principais passos para as simulações descritas a seguir.
+![Gif Tutorial](assets/demo_tutorial.gif)
+
+[Link do tutorial no Youtube](https://youtu.be/wfoNAZOh0Co)
+
 # 1. Estrutura do readme.md
 
 Este documento está organizado para guiar os avaliadores desde a configuração do ambiente até a replicação completa dos resultados do artigo. As seções incluem:
