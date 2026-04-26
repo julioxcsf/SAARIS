@@ -141,8 +141,22 @@ Teste da configurção de redes moveis 5G n78:
 TX: 40 dBm, 3.5 GHz
 
 **Resultado esperado:**
-- A zona de sombra estrutural atrás do monumento onde está localizado o RX passa a receber sinal.
-- Observa-se o ganho prático de potência (**dBm**) preenchendo a região de NLOS (Non-Line-of-Sight) por meio do redirecionamento gerado pelo RIS.
+- Verificar a mitigação de zonas de sombra através do posicionamento estratégico do RIS.
+- **Sem RIS:** A região de interesse (RX) apresenta potência de aproximadamente **-110 dBm** em algumas partes.
+- **Com RIS Ativado:** Através do redirecionamento inteligente do sinal, espera-se um **ganho de aproximadamente 21 dB a 22 dB** nas regiões escuras do RX.
+- Elevação do nível de sinal para a faixa operacional de **-89 dBm**, restabelecendo a cobertura na zona de sombra estrutural.
+
+### ⏱️ Estimativa de Tempo de Simulação
+Os tempos abaixo foram aferidos em hardware de referência (Intel Core i5-10300H, 8 GB RAM, NVIDIA GTX 1650).
+**Nota**: O Cenário da candelária é carregado com a simulação já concluida. Refazer a simulação é opcional.
+
+Cenário | Resolução | Tempo Estimado
+--- | --- | --- |
+**4.1 - Teste Inicial** | $256 \times 256$ | **~23 s** 
+**4.2 - Candelária** | $128 \times 128$ | **~32 s** 
+**4.2 - Candelária** | $256 \times 256$ | ~1 min 57 s 
+**4.2 - Candelária** | $512 \times 512$ | ~8 min 06 s 
+**4.2 - Candelária** | $1024 \times 1024$| ~39 min 22 s 
 
 # 5. Controles Básicos
 
