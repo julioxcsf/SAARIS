@@ -20,6 +20,8 @@ No Youtube, está disponível um vídeo que apresenta como importar o projeto pa
 
 # 1. Estrutura do readme.md
 
+## 1.1 Índice
+
 Este documento está organizado para guiar os avaliadores desde a configuração do ambiente até a replicação completa dos resultados do artigo. As seções incluem:
 
 *   [**1. Título e Resumo**](#saaris---simulador-aberto-de-antenas-e-ris): Apresenta o contexto do artefato.
@@ -29,9 +31,28 @@ Este documento está organizado para guiar os avaliadores desde a configuração
 *   [**5. Controles Básicos**](#5-controles-básicos): Instruções gerais para o uso adequado da ferramenta, com operação da interface e comandos de movimentação/câmera.
 *   [**6. LICENSE**](#6-license): Informações sobre a licença do software.
 
+## 1.2 Estrutura do Repositório:
+* **📂 Scripts/**: Lógica de programação em GDScript.
+    * `Simulator/`: Implementação do núcleo físico e modelos analíticos de propagação (ex: ITU-R P.526).
+    * `UI/`: Gestão de menus, ponteiras de potência e elementos de interface interativa.
+    * `Tools/`: Ferramentas auxiliares, como o importador de arquivos OSM.
+    * `Manager.gd`: Script central de controle de estados da simulação.
+* **📂 Cenas/**: Arquivos `.tscn` que compõem os ambientes 3D, instâncias de RIS e interface.
+* **📂 Materiais/**: Contém as definições de propriedades visuais e texturas, incluindo o mapeamento de cores para a escala de potência e a interface de visualização.
+* **📂 Shaders/**: Contém o código GLSL customizado, responsável por processar a potência recebida e gerar dinamicamente o gradiente de cores do mapa de calor (Heatmap) no plano de simulação.
+* **📂 Saves/**: Diretório de persistência onde os resultados `.csv` são gerados para validação.
+* **📂 Assets_BKP_Saves/Candelaria_RIS/**: Contém a cena pré-configurada utilizada no experimento do artigo.
+* **📂 assets/:** Armazena os recursos de mídia utilizados na documentação, como os GIFs tutoriais integrados a este README.
+* **📄 project.godot**: Arquivo mestre de configuração da Engine.
+* **📄 Analise_Resultados_SAARIS.ipynb**: Notebook Jupyter para pós-processamento, cálculo de RMSE e plotagem dos gráficos apresentados no artigo.
+
 # 2. Selos Considerados
 
 Os selos considerados para este artefato são: **Disponível (SELOD)**, **Funcional (SELOF)**, **Sustentável (SELOS)** e **Reprodutível (SELOR)**.
+
+⚠️ NOTA DE REPRODUTIBILIDADE (SELOR):
+Os experimentos descritos abaixo utilizam o sistema de Cenas Pré-Configuradas. Ao selecionar "Carregar Cena" e escolher Candelaria_RIS, todos os parâmetros técnicos (Potência: 40 dBm, Frequência: 3.5 GHz, Posições do TX/RX/RIS) são carregados automaticamente. 
+Não é necessária a configuração manual de parâmetros para replicar os resultados do artigo. As instruções de ajuste manual na Seção 5 destinam-se apenas ao uso da ferramenta em cenários de planejamento livre.
 
 *Preocupações com Segurança:* 
 A execução deste simulador é segura. O software opera localmente realizando apenas cálculos físicos de propagação e renderização gráfica geométrica, sem acessar dados sensíveis ou rede externa.
@@ -88,6 +109,9 @@ Este tópico orienta a reprodução das simulações do artigo.
 2. **Configure o transmissor:** Clique em **"Configurar TX"** e em seguida adicione um TX clicando em "+".
 3. Execute a simulação.
 
+### Parametros pré-armazenados para o Experimento de Teste Inicial (não exige configuração) :
+TX: 40 dBm, 2.4 GHz
+
 ### Reprodução dos Gráficos Analíticos
 Os gráficos apresentados no artigo são dinâmicos e dependem dos dados espaciais gerados e exportados pelo simulador SAARIS para arquivos `.csv` (salvos automaticamente na pasta `Saves` do projeto após a conclusão de uma simulação).
 
@@ -112,7 +136,7 @@ O cenário simulado reproduzirá exatamente a imagem de demonstração apresenta
 3. Para testar a potência no receptor com ou sem a interferência do painel RIS, acesse "Gerenciar RIS" e ative ou desative o componente. Verifique a leitura da potência diretamente ("Uso da ponteira de potência", Seção 5.2 deste documento) na região do RX.
 4. Caso deseje renderizar todo o mapa de calor do zero, clique em "cancelar" e, em seguida, "simular".
 
-### Parametros do Experimento da Candelária:
+### Parametros pré-armazenados para o Experimento da Candelária (não exige configuração) :
 Teste da configurção de redes moveis 5G n78:
 TX: 40 dBm, 3.5 GHz
 
@@ -122,7 +146,11 @@ TX: 40 dBm, 3.5 GHz
 
 # 5. Controles Básicos
 
-Para operar o simulador adequadamente, siga os fluxos de interface abaixo:
+Esta seção detalha as funcionalidades de operação livre da plataforma. 
+
+**Nota**: Enquanto a Seção 4 descreve o fluxo automatizado para reprodução fiel dos resultados do artigo, as instruções abaixo são destinadas a pesquisadores que desejam utilizar o SAARIS como ferramenta de planeamento de rede, permitindo a criação de novos cenários, importação de mapas customizados e ajuste manual de parâmetros de hardware.
+
+# 5.1 Índice
 
 1. Ajustes do transmissor (TX)
 2. Câmera
@@ -130,7 +158,7 @@ Para operar o simulador adequadamente, siga os fluxos de interface abaixo:
 4. Importação do Open Street Map (OSM)
 5. Ajustes de RIS e receptor (RX)
 
-## 5.1 Ajustes do Transmissor (TX)
+## 5.2 Ajustes do Transmissor (TX)
 
 **Adicionar TX:**
 - Clique em **"Configurar TX"** e depois em **"+"**.
@@ -149,7 +177,7 @@ Para operar o simulador adequadamente, siga os fluxos de interface abaixo:
 - Posição espacial: **-10000 a 10000**
 
 
-## 5.2 Câmera
+## 5.3 Câmera
 
 - Pressione **Esc** para habilitar/desabilitar o controle da câmera.
 
@@ -173,7 +201,7 @@ Para operar o simulador adequadamente, siga os fluxos de interface abaixo:
   - FOV
 
 
-## 5.3 Controles e Configurações de Simulação
+## 5.4 Controles e Configurações de Simulação
 
 **Controle de Fluxo:**
 - Clique em **"Simular"** para gerar o mapa de calor.
@@ -198,7 +226,7 @@ Para operar o simulador adequadamente, siga os fluxos de interface abaixo:
   - Cores referentes a cada valor de potência
 
 
-## 5.4 Importação de Cenários (OSM)
+## 5.5 Importação de Cenários (OSM)
 
 Para simular ambientes reais:
 
@@ -210,7 +238,7 @@ O sistema irá:
 - Gerar malha de colisão
 
 
-## 5.5 Superfícies Refletoras Inteligentes (RIS) e Receptores (RX)
+## 5.6 Superfícies Refletoras Inteligentes (RIS) e Receptores (RX)
 
 **Configurar RX:**
 - Defina a área de interesse no cenário.
