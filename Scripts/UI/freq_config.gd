@@ -1,13 +1,11 @@
 extends Button
 
-signal request_frequency_change(new_freq_mhz)
-
 @onready var janela_freq: AcceptDialog = $AcceptDialog
 @onready var option_freq: OptionButton = $AcceptDialog/VBoxContainer/HBoxContainer/OptionButton
 @onready var spin_freq: SpinBox = $AcceptDialog/VBoxContainer/HBoxContainer2/SpinBox
 @onready var freq_multiplier_btn: OptionButton = $AcceptDialog/VBoxContainer/HBoxContainer2/OptionButton
 
-# Fatores de conversão diretos para a unidade base do motor (MHz)
+# Fatores de conversao diretos para a unidade base do motor (MHz)
 const MULTIPLIER_TO_MHZ = {
 	0: 1000.0,      # GHz -> MHz
 	1: 1.0,         # MHz -> MHz
@@ -25,41 +23,42 @@ const PRESETS = {
 
 
 func _ready() -> void:
-	# Conecta a exibição da janela diretamente ao botão (modo modal)
+	# Conecta a exibicao da janela diretamente ao botao (modo modal)
 	self.pressed.connect(janela_freq.popup_centered)
-	
+
 	option_freq.item_selected.connect(_on_freq_preset_selected)
 	spin_freq.value_changed.connect(_on_input_changed)
 	freq_multiplier_btn.item_selected.connect(_on_input_changed)
-	
-	freq_multiplier_btn.select(1) # Visual padrão para MHz
+
+	freq_multiplier_btn.select(1) # Visual padrao para MHz
 
 
-# Converte os campos visuais para MHz e emite o sinal para o motor
+# Converte os campos visuais para MHz e grava direto no motor
 func _on_input_changed(_discard = null):
 	var valor_visual = spin_freq.value
 	var idx_unidade = freq_multiplier_btn.selected
-	
-	# Puxa o multiplicador (default 1.0 se houver erro no índice)
+
+	# Puxa o multiplicador (default 1.0 se houver erro no indice)
 	var fator_mhz = MULTIPLIER_TO_MHZ.get(idx_unidade, 1.0)
 	var frequencia_final_mhz = valor_visual * fator_mhz
-	
-	request_frequency_change.emit(frequencia_final_mhz)
+
+	if Manager.engine:
+		Manager.engine.sim_config.frequencia_mhz = frequencia_final_mhz   # direto, sem sinal
 
 
-# Ajusta a interface com base no preset escolhido pelo usuário
+# Ajusta a interface com base no preset escolhido pelo usuario
 func _on_freq_preset_selected(index: int):
 	if PRESETS.has(index):
 		var p = PRESETS[index]
-		
-		# Bloqueia o sinal temporariamente para evitar a emissão de cálculos intermediários
+
+		# Bloqueia o sinal temporariamente para evitar a emissao de calculos intermediarios
 		freq_multiplier_btn.set_block_signals(true)
 		freq_multiplier_btn.select(p["unit_idx"])
 		freq_multiplier_btn.set_block_signals(false)
-		
-		# Setar o valor dispara o `value_changed`, que chama `_on_input_changed` com a unidade já correta
+
+		# Setar o valor dispara o `value_changed`, que chama `_on_input_changed` com a unidade ja correta
 		spin_freq.value = p["val"]
-		
+
 		spin_freq.editable = false
 		freq_multiplier_btn.disabled = true
 	else:

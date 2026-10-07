@@ -1,6 +1,6 @@
 extends MenuButton
 
-# Referências para as diferentes janelas de configuração
+# Referencias para as diferentes janelas de configuracao
 @onready var win_heatmap = $HeatDialog
 @onready var win_camera = $CameraDialog
 @onready var win_simulator =$SimulatorDialog
@@ -11,6 +11,6 @@ func _ready() -> void:
 
 func _on_item_selected(id: int) -> void:
 	match id:
-		0: win_heatmap.popup_centered()    # Lógica de Cores
-		1: win_camera.popup_centered()     # Lógica de Câmera
-		2: win_simulator.popup_centered()  # Lógica do Simulador
+		0: win_heatmap.popup_centered()    # Logica de Cores
+		1: win_camera.popup_centered()     # Logica de Camera
+		2: win_simulator.popup_centered()  # Logica do Simulador

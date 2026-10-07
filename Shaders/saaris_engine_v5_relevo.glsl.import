@@ -1,0 +1,14 @@
+[remap]
+
+importer="glsl"
+type="RDShaderFile"
+uid="uid://bb3pup3y4fskg"
+path="res://.godot/imported/saaris_engine_v5_relevo.glsl-e8c00ee210fd785be0f2668bce10bed3.res"
+
+[deps]
+
+source_file="res://Shaders/saaris_engine_v5_relevo.glsl"
+dest_files=["res://.godot/imported/saaris_engine_v5_relevo.glsl-e8c00ee210fd785be0f2668bce10bed3.res"]
+
+[params]
+

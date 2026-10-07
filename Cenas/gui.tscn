@@ -516,7 +516,7 @@ text = " Start "
 
 [node name="cancel_button" type="Button" parent="LayoutVertical/BarraTopo/HBoxContainer/Control_HContainer"]
 layout_mode = 2
-text = "Cancel"
+text = "Limpar"
 
 [node name="AreaTrabalho" type="HBoxContainer" parent="LayoutVertical"]
 layout_mode = 2

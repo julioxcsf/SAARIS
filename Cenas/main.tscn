@@ -1,13 +1,14 @@
-[gd_scene load_steps=12 format=3 uid="uid://bcdns3id2xrhm"]
+[gd_scene load_steps=13 format=3 uid="uid://bcdns3id2xrhm"]
 
 [ext_resource type="PackedScene" uid="uid://bij4m5a13ug0q" path="res://Cenas/gui.tscn" id="1_x6di6"]
-[ext_resource type="Script" uid="uid://cp5lu2mwy443j" path="res://Scripts/Nodes/camera_3d.gd" id="2_btbr3"]
-[ext_resource type="Script" uid="uid://cwkglf5j72tvg" path="res://Scripts/Nodes/osm_importer.gd" id="3_jjrtw"]
+[ext_resource type="Script" uid="uid://daxcabaqruc5t" path="res://Scripts/Nodes/camera_3d.gd" id="2_btbr3"]
+[ext_resource type="Script" uid="uid://dyi6t50i07l6r" path="res://Shaders/GDscripts/button_recompilar_shader.gd" id="2_jjrtw"]
+[ext_resource type="Script" uid="uid://cnl1187ftmwyj" path="res://Scripts/Nodes/osm_importer.gd" id="3_jjrtw"]
 [ext_resource type="PackedScene" uid="uid://btflaejd5wfue" path="res://Cenas/cenario_validacao.tscn" id="4_7yi6i"]
-[ext_resource type="Script" uid="uid://cj6re7btx3yis" path="res://Scripts/Nodes/node_tx.gd" id="5_irhh0"]
-[ext_resource type="Script" uid="uid://draf1mg7fk22l" path="res://Scripts/Nodes/node_ris.gd" id="6_me8gh"]
-[ext_resource type="Script" uid="uid://bgxyns80xd5s0" path="res://Scripts/Nodes/node_rx.gd" id="7_330ga"]
-[ext_resource type="Script" uid="uid://pkk2rxox3m37" path="res://Scripts/Simulator/simulator.gd" id="8_3ea3k"]
+[ext_resource type="Script" uid="uid://cuk5ema5pl620" path="res://Scripts/Nodes/node_tx.gd" id="5_irhh0"]
+[ext_resource type="Script" uid="uid://vvj02qo2ioug" path="res://Scripts/Nodes/node_ris.gd" id="6_me8gh"]
+[ext_resource type="Script" uid="uid://riu78xpb2gq3" path="res://Scripts/Nodes/node_rx.gd" id="7_330ga"]
+[ext_resource type="Script" uid="uid://chlh0pu1ckud5" path="res://Scripts/Simulator/simulator_on_GPU.gd" id="9_btbr3"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_lquwl"]
 sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
@@ -27,6 +28,12 @@ glow_enabled = true
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="GUI" parent="CanvasLayer" instance=ExtResource("1_x6di6")]
+
+[node name="Button" type="Button" parent="CanvasLayer/GUI/LayoutVertical/BarraTopo/HBoxContainer/HSplitContainer" index="0"]
+visible = false
+layout_mode = 2
+text = "Recompilar Shaders"
+script = ExtResource("2_jjrtw")
 
 [node name="ListaRIS" parent="CanvasLayer/GUI/LayoutVertical/AreaTrabalho/Sidebar/VBoxContainer/RIS_Panel/VBoxContainer" index="0"]
 clip_contents = false
@@ -58,17 +65,6 @@ script = ExtResource("2_btbr3")
 
 [node name="OSM_Importer" type="Node3D" parent="Simulation"]
 script = ExtResource("3_jjrtw")
-osm_file_path = ""
-carregar_mapa = false
-limpar_tudo = false
-road_width = 6.0
-gerar_chao_limite_real = true
-cor_chao = Color(0.15, 0.35, 0.15, 1)
-altura_extra_chao = 0.1
-margin = 500.0
-altura_por_andar = 3.0
-usar_altura_padrao_se_falhar = 10.0
-estatistica_alturas = Array[Vector2]([Vector2(0.3, 15), Vector2(6, 8), Vector2(0.1, 4)])
 
 [node name="Scene3D" type="Node3D" parent="Simulation"]
 
@@ -84,6 +80,8 @@ script = ExtResource("6_me8gh")
 script = ExtResource("7_330ga")
 
 [node name="Simulator" type="Node3D" parent="Simulation"]
-script = ExtResource("8_3ea3k")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0865479, 0, 0)
+script = ExtResource("9_btbr3")
+shader_selecionado = 4
 
 [editable path="CanvasLayer/GUI"]

@@ -15,21 +15,20 @@ extends AcceptDialog
 func _ready() -> void:
 	if not confirmed.is_connected(_on_config_confirmed):
 		confirmed.connect(_on_config_confirmed)
-	
-	Manager.request_simulator_config.connect(_on_manager_enviou_config_simulador)
+	call_deferred("_carregar_campos")
 
-# Preenche os campos quando o Manager carrega os dados do disco
-func _on_manager_enviou_config_simulador(config_data: Dictionary):
-	check_los.button_pressed = config_data.get("los_ativado", true)
-	check_reflection.button_pressed = config_data.get("reflection_ativado", true)
-	check_diffraction.button_pressed = config_data.get("diffraction_ativado", true)
-	spin_pixels.value = config_data.get("pixels_per_frame", 256)
-	spin_max_reflections.value = config_data.get("max_reflections", 5)
-	spin_reflection_loss.value = config_data.get("reflection_loss_db", 5.0)
-	spin_expoent_path_loss.value = config_data.get("path_loss_exponent", 2.8)
-	color_max.color = config_data.get("max_sinal_color", Color.RED)
-	color_crit.color = config_data.get("critical_sinal_color", Color.GREEN)
-	color_min.color = config_data.get("min_sinal_color", Color.BLUE)
+## Preenche os campos com o que esta no settings.cfg (padroes se nao existir).
+func _carregar_campos():
+	check_los.button_pressed = Manager.ler_config("Simulador", "los", true)
+	check_reflection.button_pressed = Manager.ler_config("Simulador", "reflexao", true)
+	check_diffraction.button_pressed = Manager.ler_config("Simulador", "difracao", true)
+	spin_pixels.value = Manager.ler_config("Simulador", "pixels_per_frame", 256)
+	spin_max_reflections.value = Manager.ler_config("Simulador", "max_reflections", 5)
+	spin_reflection_loss.value = Manager.ler_config("Simulador", "reflection_loss_db", 5.0)
+	spin_expoent_path_loss.value = Manager.ler_config("Simulador", "path_loss_exponent", 2.8)
+	color_max.color = Manager.ler_config("Simulador", "cor_max", Color.RED)
+	color_crit.color = Manager.ler_config("Simulador", "cor_crit", Color.GREEN)
+	color_min.color = Manager.ler_config("Simulador", "cor_min", Color.BLUE)
 
 func _on_config_confirmed():
 	var config_data = {
@@ -44,9 +43,10 @@ func _on_config_confirmed():
 		"critical_sinal_color": color_crit.color,
 		"min_sinal_color": color_min.color
 	}
-	
-	Manager.emit_simulator_config(config_data)
+
+	if Manager.engine:
+		Manager.engine.aplicar_config_simulador(config_data)   # chamada direta
 	Manager.save_global_config(config_data, {}, {})
-	
+
 	if Manager.DEBUG:
 		print("Interface: Dicionário do simulador enviado: ", config_data)

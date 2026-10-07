@@ -1,0 +1,14 @@
+[remap]
+
+importer="glsl"
+type="RDShaderFile"
+uid="uid://c1275yqtn0d40"
+path="res://.godot/imported/saaris_engine_v3_penetracao_linear.glsl-e4f4acb447647f64bea2024de61e0a10.res"
+
+[deps]
+
+source_file="res://Shaders/saaris_engine_v3_penetracao_linear.glsl"
+dest_files=["res://.godot/imported/saaris_engine_v3_penetracao_linear.glsl-e4f4acb447647f64bea2024de61e0a10.res"]
+
+[params]
+

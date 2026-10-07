@@ -3,273 +3,156 @@
 ![Godot Engine](https://img.shields.io/badge/Godot_Engine-4.4-blue?logo=godotengine)
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
 
-**Título do Artigo:** SAARIS: Um Simulador Aberto de Antenas e Superfícies
-Inteligentes Reconfiguráveis
+**Artigo:** SAARIS: Um Simulador Aberto de Antenas e Superfícies Inteligentes Reconfiguráveis
+(SBRC 2026, Salão de Ferramentas, **menção honrosa**) — [leia no SOL/SBC](https://sol.sbc.org.br/index.php/sbrc_estendido/article/view/42594)
 
-**Resumo:**  A simulação de propagação de sinais em cenários urbanos densos é desafiadora. Este trabalho apresenta o SAARIS, um simulador interativo para planejamento de redes móveis com superfícies inteligentes reconfiguráveis (RIS). A ferramenta combina modelagem geométrica 3D do ambiente de simulação com modelos analíticos de propagação, permitindo a geração de mapas de calor e a manipulação direta de antenas e superfícies RIS. O SAARIS permite a importação de malhas urbanas do OpenStreetMaps, além de apresentar métricas quantitativas de cobertura. Os experimentos validam a ferramenta em comparação com modelos analíticos e demonstram a sua capacidade de mitigação de regiões de sombra com o posicionamento de uma superfície RIS.
+**Resumo:** A simulação de propagação de sinais em cenários urbanos densos é desafiadora. O SAARIS é um simulador interativo para planejamento de redes móveis com superfícies inteligentes reconfiguráveis (RIS). A ferramenta combina modelagem geométrica 3D do ambiente com modelos analíticos de propagação, permitindo a geração de mapas de calor e a manipulação direta de antenas e superfícies RIS. Importa malhas urbanas do OpenStreetMap e apresenta métricas quantitativas de cobertura.
 
 ![Demonstração do SAARIS](assets/demo_inicial.gif)
 
-Este artefato é uma ferramenta visual e interativa focada na simulação de propagação de sinais de radiofrequência, antenas e Superfícies Refletoras Inteligentes (RIS). O documento guia os avaliadores desde a configuração da engine gráfica até a operação da interface para reproduzir os mapas de calor e os cenários de teste estruturais.
+---
 
-No Youtube, está disponível um vídeo que apresenta como importar o projeto para a Game Engine Godot 4, além de alguns dos principais passos para as simulações descritas a seguir.
+# 1. Qual versão baixar?
 
-![Gif Tutorial](assets/demo_tutorial.gif)
+| Versão | Motor de cálculo | Para quem | Onde baixar |
+|---|---|---|---|
+| **v2.0 (GPU)** — atual | Compute shaders (GLSL) na GPU | Uso geral, cenários grandes, resoluções altas | **Releases → `v2.0-gpu`** (este código, branch `main`) |
+| **v1.0 (CPU)** — original do artigo | Cálculo em CPU | Reproduzir exatamente os resultados do artigo, máquinas sem GPU adequada | **Releases → `v1.0-cpu`** (código: tag/branch `cpu-v1`) |
 
-[Link do tutorial no Youtube](https://youtu.be/wfoNAZOh0Co)
+Se o objetivo é **reproduzir os gráficos do artigo**, use a **v1.0 (CPU)**: o roteiro de experimentos, o notebook `Analise_Resultados_SAARIS.ipynb` e os valores esperados descritos no artigo correspondem a ela.
 
-# 1. Estrutura do readme.md
+---
 
-## 1.1 Índice
+# 2. Novidades da versão 2.0 (GPU)
 
-Este documento está organizado para guiar os avaliadores desde a configuração do ambiente até a replicação completa dos resultados do artigo. As seções incluem:
+* **Cálculo na GPU** (compute shaders GLSL), com despacho em faixas (*tiles*) para suportar resoluções de até 4096 × 4096 sem estourar o tempo limite do driver.
+* **Propagação mais completa:** visada direta (log-distância com expoente `n` configurável), reflexões com perda fixa por salto, **penetração** em prédios e **difração** em gume de faca (baseada na ITU-R P.526) no topo e nas arestas verticais do prédio que bloqueia, encadeando até 3 prédios. As contribuições são somadas em Watts.
+* **Parâmetros físicos ajustáveis** em *Configurações → Ajustes do Simulador*: expoente de perda, número máximo de reflexões e perda por reflexão (dB).
+* **Relatório de cobertura** (HTML ou Markdown) — ver seção 3.
+* **Ponteira de potência detalhada:** ao apontar um ponto do mapa, uma janela móvel e colorida mostra a distância (3D e horizontal), se há visada, e o detalhamento da perda (espaço livre, zona de Fresnel, transmissão pelo prédio e tabela de difração), comparando o cálculo analítico do ponto com o resultado da GPU.
+* **Limpeza do código** e comentários padronizados.
 
-*   [**1. Título e Resumo**](#saaris---simulador-aberto-de-antenas-e-ris): Apresenta o contexto do artefato.
-*   [**2. Selos Considerados e Preocupações com Segurança**](#2-selos-considerados): Informações importantes para o processo de avaliação.
-*   [**3. Requisitos, Dependências e Instalação**](#3-requisitos-dependências-e-instalação): Requisitos de hardware/software e instruções para execução via binário ou código-fonte.
-*   [**4. Experimentos**](#4-experimentos): Instruções detalhadas para reproduzir cada reivindicação do artigo, de fluxo manual.
-*   [**5. Controles Básicos**](#5-controles-básicos): Instruções gerais para o uso adequado da ferramenta, com operação da interface e comandos de movimentação/câmera.
-*   [**6. LICENSE**](#6-license): Informações sobre a licença do software.
+## Desempenho: CPU × GPU
 
-## 1.2 Estrutura do Repositório:
-* **📂 Scripts/**: Lógica de programação em GDScript.
-    * `Simulator/`: Implementação do núcleo físico e modelos analíticos de propagação (ex: ITU-R P.526).
-    * `UI/`: Gestão de menus, ponteiras de potência e elementos de interface interativa.
-    * `Tools/`: Ferramentas auxiliares, como o importador de arquivos OSM.
-    * `Manager.gd`: Script central de controle de estados da simulação.
-* **📂 Cenas/**: Arquivos `.tscn` que compõem os ambientes 3D, instâncias de RIS e interface.
-* **📂 Materiais/**: Contém as definições de propriedades visuais e texturas, incluindo o mapeamento de cores para a escala de potência e a interface de visualização.
-* **📂 Shaders/**: Contém o código GLSL customizado, responsável por processar a potência recebida e gerar dinamicamente o gradiente de cores do mapa de calor (Heatmap) no plano de simulação.
-* **📂 Saves/**: Diretório de persistência onde os resultados `.csv` são gerados para validação.
-* **📂 Assets_BKP_Saves/Candelaria_RIS/**: Contém a cena pré-configurada utilizada no experimento do artigo.
-* **📂 assets/:** Armazena os recursos de mídia utilizados na documentação, como os GIFs tutoriais integrados a este README.
-* **📄 project.godot**: Arquivo mestre de configuração da Engine.
-* **📄 Analise_Resultados_SAARIS.ipynb**: Notebook Jupyter para pós-processamento, cálculo de RMSE e plotagem dos gráficos apresentados no artigo.
+Cenário da Candelária, **5 medidas por resolução** (tempo médio ± desvio-padrão).
 
-# 2. Selos Considerados
+| Resolução | CPU (média) | CPU (desvio) | GPU (média) | GPU (desvio) | Aceleração |
+|---|---|---|---|---|---|
+| 128 × 128 | 16,4 s | 0,55 s | 0,038 s | 0,0034 s | ~430× |
+| 256 × 256 | 67,8 s (1:08) | 0,84 s | 0,057 s | 0,0020 s | ~1.190× |
+| 512 × 512 | 318,0 s (5:18) | 0,71 s | 0,106 s | 0,0038 s | ~3.000× |
+| 1024 × 1024 | 2066,8 s (34:27) | 5,07 s | 0,273 s | 0,0239 s | ~7.570× |
+| 2048 × 2048 | — | — | 0,733 s | 0,0869 s | — |
+| 4096 × 4096 | — | — | 1,932 s | 0,0075 s | — |
 
-Os selos considerados para este artefato são: **Disponível (SELOD)**, **Funcional (SELOF)**, **Sustentável (SELOS)** e **Reprodutível (SELOR)**.
+> **Hardware de medição:** [PREENCHER: GPU, CPU e RAM usadas]
 
-⚠️ NOTA DE REPRODUTIBILIDADE (SELOR):
-Os experimentos descritos abaixo utilizam o sistema de Cenas Pré-Configuradas. Ao selecionar "Carregar Cena" e escolher Candelaria_RIS, todos os parâmetros técnicos (Potência: 40 dBm, Frequência: 3.5 GHz, Posições do TX/RX/RIS) são carregados automaticamente. 
-Não é necessária a configuração manual de parâmetros para replicar os resultados do artigo. As instruções de ajuste manual na Seção 5 destinam-se apenas ao uso da ferramenta em cenários de planejamento livre.
+Na CPU, o tempo cresce mais que 4× a cada dobra de resolução, chegando a **34 min em 1024²**. Na GPU, a mesma resolução leva **0,27 s**, e 4096² (16× mais pixels) leva **1,9 s**, o que torna possível reposicionar antenas e RIS e simular de novo de forma praticamente interativa.
 
-*Preocupações com Segurança:* 
-A execução deste simulador é segura. O software opera localmente realizando apenas cálculos físicos de propagação e renderização gráfica geométrica, sem acessar dados sensíveis ou rede externa.
+---
 
-# 3. Requisitos, Dependências e Instalação
+# 3. Relatório de cobertura
 
-Esta seção descreve os requisitos de hardware e software para a execução dos experimentos. Por se tratar de um ambiente gráfico interativo compilado, não há dependências de scripts externos ou bibliotecas complexas.
+Ao final de uma simulação, o SAARIS gera um relatório em **HTML** ou **Markdown** (pasta `Saves/Relatorios`) para registrar a simulação e os principais dados:
 
-## 3.1 Informações Básicas
+* **TX, RX e RIS:** posições, frequência, potência e parâmetros.
+* **Execução da simulação:** resolução, **GPU e CPU utilizadas**, número de despachos e **tempo de simulação**.
+* **Área de cobertura:** percentual de pixels acima do limiar e dimensões do mapa.
+* **Comparação da potência recebida no RX com e sem o efeito do RIS.**
 
-*   **Hardware:**
-    *   Computador padrão com suporte a renderização 3D.
-    *   Computador padrão com pelo menos **8 GB de RAM**.
-    *   Aproximadamente **150 MB** de espaço livre em disco para o executável, assets geométricos e configurações.
-*   **Software:**
-    *   Sistema Operacional: Windows 10/11, macOS ou Linux.
-    *   Opção Executável: Windows (binário autossuficiente).
-    *   Opção Código Fonte: Godot Engine 4.4.1 Stable (Versão Standard).
+---
 
-## 3.2 Dependências
-Os modelos 3D do cenário de teste inicial e o arquivo.osm da candelária ja estão incluidos no projeto, removendo qualquer necessidade de manipulação.
+# 4. Limitações da versão 2.0 e validação
 
-## 3.3 Instalação e Execução
+* **A versão 2.0 não possui modelo analítico de comparação.** A validação contra modelos analíticos (ITU-R P.526) descrita no artigo foi feita com a versão 1.0 (CPU).
+* **Medidas de campo estão sendo coletadas** para uma futura comparação entre simulador e experimento.
+* O repositório contém código **experimental, desativado na interface**, para relevo e importação automática de dados geográficos (`Scripts/Geo/` e `Shaders/saaris_engine_v5_relevo.glsl`). Sem terreno, a v5 se comporta de forma idêntica à v4. O suporte a relevo é **trabalho futuro** e ainda não é uma funcionalidade suportada.
+* Todos os transmissores são omnidirecionais; o mapa soma, em Watts, a contribuição de todas as antenas ligadas.
 
-Disponibilizamos duas formas de avaliar a ferramenta:
+---
 
-### Opção A: Binário Autossuficiente (Recomendado)
-Está disponível um binário pré-compilado para Windows 10 x86_64.
+# 5. Instalação e execução
 
-1. Acesse a aba **Releases** deste repositório.
-2. Baixe o arquivo .zip e extraia o seu conteúdo.
-3. Execute o saaris.exe.
+## 5.1 Requisitos
 
-### Opção B: Via Código Fonte
-Caso deseje avaliar o código fonte em macOS/Linux:
+* **v2.0 (GPU):** Windows 10/11 e **placa de vídeo com suporte a Vulkan**; 8 GB de RAM; ~150 MB livres. Para código-fonte: Godot Engine 4.4.1 (Standard).
+* **v1.0 (CPU):** qualquer computador com 8 GB de RAM; apenas muito mais lenta.
 
-1. Baixe o Godot Engine 4.4.1
-2. Clone este repositório
+## 5.2 Opção A: executável (recomendado)
+
+1. Abra a aba **Releases** deste repositório.
+2. Baixe o `.zip` da versão desejada (**`v2.0-gpu`** ou **`v1.0-cpu`**) e extraia.
+3. Execute o `.exe` (mantenha o arquivo `.pck` na mesma pasta, se houver).
+
+## 5.3 Opção B: código-fonte (Windows, macOS, Linux)
+
+1. Instale o Godot Engine 4.4.1.
+2. Clone o repositório:
    ```bash
-   git clone https://github.com/julioxcsf/saaris.git
-3. Se baixou o ZIP, extraia-o. O GitHub cria uma pasta raiz (ex: saaris-main). Entre nela até localizar o arquivo project.godot.
-4. Abra o Godot Engine 4.4.1.
-5. Clique em "Import" no Gerenciador de Projetos.
-6. Navegue e selecione a pasta interna que contém o arquivo project.godot.
-7. Com o projeto aberto, pressione F5 para iniciar a simulação.
+   git clone https://github.com/julioxcsf/SAARIS.git
+   ```
+   Para a versão CPU: `git checkout cpu-v1`.
+3. No Godot, clique em **Import** e selecione o arquivo `project.godot`.
+4. Pressione **F5**.
 
-# 4. Experimentos
+Os modelos do cenário de teste e o `.osm` da Candelária já estão incluídos no projeto.
 
-Este tópico orienta a reprodução das simulações do artigo.
+---
 
-## 4.1 Cenário de Teste Inicial
+# 6. Uso rápido
 
-1. Inicie o simulador.
-2. **Configure o transmissor:** Clique em **"Configurar TX"** e em seguida adicione um TX clicando em "+".
-3. Execute a simulação.
+1. Abra o simulador e clique em **Save/Load → Carregar Cena → `Candelaria_RIS`** (TX 40 dBm, 3,5 GHz, 5G n78).
+2. Escolha a **resolução** e clique em **Simular**. O relatório é gerado ao final.
+3. Em **Gerenciar RIS**, ligue/desligue o painel para ver o efeito no RX.
+4. Ative a **ponteira de potência** e clique com o botão **direito** no mapa para ver o detalhamento da perda no ponto.
 
-### Parametros pré-armazenados para o Experimento de Teste Inicial (não exige configuração) :
-TX: 40 dBm, 2.4 GHz
+> Os valores de potência da v2.0 **não são idênticos** aos do artigo, pois o modelo de propagação evoluiu (penetração, difração encadeada, parâmetros ajustáveis). Para reproduzir o artigo, use a v1.0.
 
-### Reprodução dos Gráficos Analíticos
-Os gráficos apresentados no artigo são dinâmicos e dependem dos dados espaciais gerados e exportados pelo simulador SAARIS para arquivos `.csv` (salvos automaticamente na pasta `Saves` do projeto após a conclusão de uma simulação).
+---
 
-### NOTA DE FIDELIDADE VISUAL
-Para reproduzir exatamente o gradiente de cores das figuras do artigo, acesse Configurações → Mapa de Calor e defina os limites de potência conforme a escala de validação: Máxima (-40 dBm), Crítica (-75 dBm) e Mínima (-120 dBm).
+# 7. Controles básicos
 
-Para validar a plotagem teórica vs. simulação numérica e garantir a reprodutibilidade (SELOR) sem a necessidade de instalar Python localmente, disponibilizamos um script em formato Jupyter Notebook (`Analise_Resultados_SAARIS.ipynb`) na raiz deste repositório.
+## 7.1 Transmissor (TX)
+* **Configurar TX → "+"** cria um TX na origem `(0, 30, 0)` com 2400 MHz e 40 dBm. Todos são **omnidirecionais**.
+* Mova escolhendo um plano e clicando no cenário, ou editando **X, Y, Z**.
+* Limites: potência 1–100 dBm; frequência 1 kHz–1 THz; posição -10000 a 10000.
 
-**Fluxo de Validação:**
-1. Execute o Experimento de Propagação Básica no simulador SAARIS. Ao final do processamento, o motor exportará um arquivo chamado `saaris_export_[DATA-HORA].csv` para a pasta `Saves`.
-2. Acesse uma plataforma online como o **Google Colab** (colab.research.google.com) ou JupyterLite e faça o upload do arquivo `Analise_Resultados_SAARIS.ipynb`.
-3. No painel de arquivos da plataforma online, faça o upload do `.csv` que o simulador gerou.
-4. Execute as células do Notebook. O script identificará automaticamente o CSV gerado, aplicará o modelo teórico matemático (ITU-R P.526) e fará a plotagem do gráfico analítico e o cálculo do erro estatístico (RMSE) idênticos aos apresentados no artigo.
+## 7.2 Câmera
+* **Esc** liga/desliga o controle da câmera. Arraste o mouse para girar; **W A S D** para mover.
+* **Configurações → Ajustes de Câmera:** velocidade, sensibilidade e FOV.
 
-**Resultado esperado:**
-O cenário simulado reproduzirá exatamente a imagem de demonstração apresentada no início desta página, ilustrando a propagação básica de radiofrequência, a atenuação no espaço livre e a formação nítida de zonas de sombra (difração) nos obstáculos geométricos.
+## 7.3 Simulação
+* **Simular** gera o mapa de calor; **Pause** interrompe; **Cancelar** reinicia.
+* **Configurações → Mapa de Calor:** potência mínima, crítica e máxima, e cores. Para a escala das figuras do artigo: máxima -40 dBm, crítica -75 dBm, mínima -120 dBm.
+* **Configurações → Ajustes do Simulador:** expoente de perda, máximo de reflexões e perda por reflexão.
 
-## 4.2 Cenário da Igreja da Candelária
+## 7.3 Importação de cenários (OSM)
+Selecione a importação de mapa e carregue um arquivo `.osm`. O sistema gera as malhas 3D (prédios e solo) e a malha de colisão.
 
-1. Na interface principal, clique em **"Save/Load"** e selecione "Carregar Cena".
-2. Carregue o arquivo de simulação **"Candelaria_RIS"**.
-3. Para testar a potência no receptor com ou sem a interferência do painel RIS, acesse "Gerenciar RIS" e ative ou desative o componente. Verifique a leitura da potência diretamente ("Uso da ponteira de potência", Seção 5.2 deste documento) na região do RX.
-4. Caso deseje renderizar todo o mapa de calor do zero, clique em "cancelar" e, em seguida, "simular".
+## 7.4 RIS e receptores (RX)
+* **Configurar RX:** defina a área de interesse.
+* **Gerenciar RIS → adicionar:** eficiência da placa e número de células (N × M). O motor calcula a bissetriz geométrica TX–RX para o alinhamento.
 
-### Parametros pré-armazenados para o Experimento da Candelária (não exige configuração) :
-Teste da configurção de redes moveis 5G n78:
-TX: 40 dBm, 3.5 GHz
+---
 
-**Resultado esperado:**
-- Verificar a mitigação de zonas de sombra através do posicionamento estratégico do RIS.
-- **Sem RIS:** A região de interesse (RX) apresenta potência de aproximadamente **-110 dBm** em algumas partes.
-- **Com RIS Ativado:** Através do redirecionamento inteligente do sinal, espera-se um **ganho de aproximadamente 21 dB a 22 dB** nas regiões escuras do RX.
-- Elevação do nível de sinal para a faixa operacional de **-89 dBm**, restabelecendo a cobertura na zona de sombra estrutural.
+# 8. Estrutura do repositório
 
-### ⏱️ Estimativa de Tempo de Simulação
-Os tempos abaixo foram aferidos em hardware de referência (Intel Core i5-10300H, 8 GB RAM, NVIDIA GTX 1650).
-**Nota**: O Cenário da candelária é carregado com a simulação já concluida. Refazer a simulação é opcional.
+* **Scripts/**: lógica em GDScript.
+    * `Simulator/`: núcleo do simulador (execução na GPU, modelo de RIS, análise de ponto).
+    * `Report/`: gerador do relatório.
+    * `UI/`: menus, ponteira de potência e interface.
+    * `Nodes/`: TX, RX, RIS, câmera e importador OSM.
+    * `Tools/`: utilidades (matemática de RF).
+    * `Geo/`: **experimental**, relevo e dados geográficos (inativo).
+* **Cenas/**: arquivos `.tscn` dos ambientes 3D, RIS e interface.
+* **Materiais/**: cores e materiais do mapa de calor.
+* **Shaders/**: GLSL dos motores de cálculo (`v1` a `v4` e `v5` experimental) e do mapa de calor.
+* **Saves/** e **Assets_BKP_Saves/**: cenas pré-configuradas (Candelária).
+* **assets/**: mídia da documentação e modelos 3D.
+* **Analise_Resultados_SAARIS.ipynb**: notebook do artigo (versão 1.0, CPU).
 
-Cenário | Resolução | Tempo Estimado
---- | --- | --- |
-**4.1 - Teste Inicial** | $256 \times 256$ | **~23 s** 
-**4.2 - Candelária** | $128 \times 128$ | **~32 s** 
-**4.2 - Candelária** | $256 \times 256$ | ~1 min 57 s 
-**4.2 - Candelária** | $512 \times 512$ | ~8 min 06 s 
-**4.2 - Candelária** | $1024 \times 1024$| ~39 min 22 s 
+---
 
-# 5. Controles Básicos
+# 9. Licença
 
-Esta seção detalha as funcionalidades de operação livre da plataforma. 
-
-**Nota**: Enquanto a Seção 4 descreve o fluxo automatizado para reprodução fiel dos resultados do artigo, as instruções abaixo são destinadas a pesquisadores que desejam utilizar o SAARIS como ferramenta de planeamento de rede, permitindo a criação de novos cenários, importação de mapas customizados e ajuste manual de parâmetros de hardware.
-
-# 5.1 Índice
-
-1. Ajustes do transmissor (TX)
-2. Câmera
-3. Controles e configurações Simulação
-4. Importação do Open Street Map (OSM)
-5. Ajustes de RIS e receptor (RX)
-
-## 5.2 Ajustes do Transmissor (TX)
-
-**Adicionar TX:**
-- Clique em **"Configurar TX"** e depois em **"+"**.
-- O TX surge na origem `(0, 30, 0)` com:
-  - Frequência: **2400 MHz**
-  - Potência: **40 dBm**
-- Todos os transmissores são **omnidirecionais**.
-
-**Mover TX:**
-- Escolha um plano para fixar e clique na posição desejada no cenário.
-- Ou altere diretamente os valores **X, Y e Z** na interface.
-
-**Limites:**
-- Potência: **1 dBm a 100 dBm**
-- Frequência: **1 kHz a 1 THz**
-- Posição espacial: **-10000 a 10000**
-
-
-## 5.3 Câmera
-
-- Pressione **Esc** para habilitar/desabilitar o controle da câmera.
-
-**Rotação:**
-- Arraste o mouse.
-
-**Movimentação (WASD):**
-- **W** → frente  
-- **S** → trás  
-- **A** → esquerda  
-- **D** → direita  
-
-**Uso da ponteira de potência:**
-- Após ativar a ponteira na interface, aperte com o botão DIREITO do mouse no mapa
-
-**Configuração:**
-- Vá em **Configurações → Ajustes de Câmera**
-- Ajuste:
-  - Velocidade
-  - Sensibilidade
-  - FOV
-
-
-## 5.4 Controles e Configurações de Simulação
-
-**Controle de Fluxo:**
-- Clique em **"Simular"** para gerar o mapa de calor.
-- Use:
-  - **Pause** → interrompe temporariamente
-  - **Cancelar** → reinicia a simulação
-
-**Mapa de Calor:**
-- Em **Configurações**, ajuste:
-  - Potência mínima
-  - Potência crítica
-  - Potência máxima
-
-**Escala Visual:**
-- Ative a barra de cores na interface.
-
-**Física do Simulador:**
-- Em **Configurações → Ajustes do Simulador**, configure:
-  - Expoente de perda de caminho
-  - Número máximo de reflexões
-  - Perda por reflexão (dB)
-  - Cores referentes a cada valor de potência
-
-
-## 5.5 Importação de Cenários (OSM)
-
-Para simular ambientes reais:
-
-- Selecione a opção de importação de mapa.
-- Carregue um arquivo `.osm`.
-
-O sistema irá:
-- Gerar malhas 3D (prédios e solo)
-- Gerar malha de colisão
-
-
-## 5.6 Superfícies Refletoras Inteligentes (RIS) e Receptores (RX)
-
-**Configurar RX:**
-- Defina a área de interesse no cenário.
-
-**Adicionar RIS:**
-- Vá em **"Gerenciar RIS"**
-- Adicione uma nova superfície.
-
-**Parâmetros do RIS:**
-- Eficiência da placa
-- Número de células (**N x M**)
-
-**Alinhamento:**
-- O motor calcula automaticamente a bissetriz geométrica entre TX e RX, otimizando ângulo de incidência
-
-
-
-# 6. LICENSE
-
-Este projeto está licenciado sob a Licença MIT. Consulte o arquivo `LICENSE` para obter mais detalhes.
+Licença MIT. Consulte o arquivo `LICENSE`.

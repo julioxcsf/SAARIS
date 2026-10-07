@@ -1,59 +1,81 @@
 # node_tx.gd
 extends Node3D
 
-func _ready():
-	# Escutar o Manager
-	Manager.request_add_tx.connect(_add_tx)
-	Manager.request_remove_tx.connect(_remove_tx)
-	Manager.request_update_tx.connect(_update_tx)
-	Manager.request_get_tx_info.connect(_get_tx_info)
+var tx_cache : Array = []
+var _contador: int = 0
 
-func _add_tx():
+func _ready():
+	# Registra a si mesmo no autoload para acesso direto global
+	Manager.tx_handler = self
+
+func add_tx():
 	var new_tx = Manager.tx_scene.instantiate()
 	add_child(new_tx)
-	
-	# --- PADRÕES SOLICITADOS (Batismo) ---
+
+	# --- PADROES SOLICITADOS (Batismo) ---
 	new_tx.position = Vector3(0, 30, 0) # Altura 30m
+	if Manager.geo != null and Manager.geo.has_method("posicao_padrao_tx"):
+		new_tx.position = Manager.geo.posicao_padrao_tx()   # centro da regiao, 30 m sobre o terreno
 	new_tx.set("potencia_dbm", 40.0)    # 40 dBm
-	new_tx.set("freq_mhz", 2400.0)      # 2400 MHz
+	new_tx.set("freq_mhz", 2400.0)      # 2.4 GHz
 	new_tx.set("ligado", true)
-	
-	# Nome sequencial
-	new_tx.name = "TX_" + str(new_tx.get_index())
-	
+
+	tx_cache.append(new_tx)
+
+	# Nome sequencial (monotonico: nao repete nome apos remocoes)
+	_contador += 1
+	var idx = tx_cache.size() - 1
+	new_tx.name = "TX_" + str(_contador)
+
 	print("[TX Handler] Criada antena padrão: ", new_tx.name)
-	
-	# Avisa a UI que criou (para aparecer na lista)
-	Manager.handshake_tx_created.emit(new_tx.get_index(), new_tx.name)
-	
-	# Avisa quem estiver ouvindo que a antena já nasceu com dados prontos
-	# (Isso força a UI a atualizar os campos se ela estiver selecionada)
-	_get_tx_info(new_tx.get_index())
+	_atualizar_ris()
 
-func _remove_tx(index: int):
-	if index < get_child_count():
-		get_child(index).queue_free()
-		# Aguarda o frame para garantir que o índice atualize na árvore
-		await get_tree().process_frame 
-		Manager.handshake_tx_deleted.emit(index)
+	# Retorna um pacote contendo o indice e os dados iniciais para a UI se atualizar na hora
+	return {
+		"index": idx,
+		"name": new_tx.name,
+		"data": get_tx_info(idx)
+	}
 
-func _update_tx(index: int, params: Dictionary):
-	if index < get_child_count():
-		var tx = get_child(index)
+
+func remove_tx(index: int) -> bool:
+	if index >= 0 and index < tx_cache.size():
+		var tx_para_remover = tx_cache[index]
+		tx_para_remover.queue_free()
+		tx_cache.remove_at(index)
+		print("[TX Handler] Antena removida do índice: ", index)
+		_atualizar_ris()
+		return true # Confirmacao de sucesso
+	return false
+
+func update_tx(index: int, params: Dictionary) -> void:
+	if index >= 0 and index < tx_cache.size():
+		var tx = tx_cache[index]
 		if params.has("ligado"): tx.set("ligado", params["ligado"])
 		if params.has("freq"): tx.set("freq_mhz", params["freq"])
 		if params.has("potencia"): tx.set("potencia_dbm", params["potencia"])
 		if params.has("posicao"): tx.position = params["posicao"]
-		print("[TX Handler] TX ", index, " atualizado.")
+		_atualizar_ris()
 
-# --- Devolve o pacote de dados para a UI --- #WARNING buscar por NOVO: para tirar comentarios de IA
-func _get_tx_info(index: int):
-	if index >= 0 and index < get_child_count():
-		var tx = get_child(index)
-		var data = {
+## Remove todos os TX (usado ao carregar um save).
+func clear_all() -> void:
+	for tx in tx_cache:
+		if is_instance_valid(tx):
+			tx.queue_free()
+	tx_cache.clear()
+
+func get_tx_info(index: int) -> Dictionary:
+	if index >= 0 and index < tx_cache.size():
+		var tx = tx_cache[index]
+		return {
 			"ligado": tx.get("ligado"),
 			"freq": tx.get("freq_mhz"),
 			"potencia": tx.get("potencia_dbm"),
 			"posicao": tx.position
 		}
-		Manager.response_tx_info.emit(index, data)
+	return {}
+
+## TX mudou (posicao/potencia/liga-desliga): os RIS reorientam e o diagnostico se atualiza.
+func _atualizar_ris() -> void:
+	if Manager.ris_handler != null:
+		Manager.ris_handler.recalcular_todos()

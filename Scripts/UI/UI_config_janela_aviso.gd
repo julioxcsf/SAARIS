@@ -1,8 +1,8 @@
 extends AcceptDialog
 
 func _ready():
-	Manager.show_user_warning.connect(_on_show_warning)
+	Manager.ui_aviso = self      # o Manager chama  Manager.aviso("texto")  ->  mostrar()
 
-func _on_show_warning(msg: String):
+func mostrar(msg: String):
 	self.dialog_text = msg
 	self.popup_centered()
